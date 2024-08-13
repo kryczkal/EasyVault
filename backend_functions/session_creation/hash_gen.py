@@ -1,9 +1,7 @@
 import hashlib
 import uuid
-import functions_framework
 
-@functions_framework.http
-def hash_gen(request):
+def hash_gen():
     unique_id = str(uuid.uuid4())
     
     # Create SHA-1 hash

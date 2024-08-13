@@ -35,11 +35,3 @@ resource "google_secret_manager_secret_version" "secret_versions" {
   secret      = google_secret_manager_secret.secrets[each.key].id
   secret_data = each.value
 }
-
-# IAM binding for Cloud Functions to access secrets
-resource "google_secret_manager_secret_iam_member" "db_secret_access" {
-  for_each  = google_secret_manager_secret.secrets
-  secret_id = each.value.id
-  role      = "roles/secretmanager.secretAccessor"
-  member  = "serviceAccount:${google_service_account.function_account.email}"
-}
