@@ -42,3 +42,6 @@ tf.plan
 tf.plan.json
 
 **/cloud_functions_zip/*
+
+*credentials.json*
+*
