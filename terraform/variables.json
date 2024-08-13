@@ -1,6 +1,6 @@
 {
-  "tfstate_bucket_url": "c5655985262e3142_bucket_tfstate",
+  "tfstate_bucket_url": "4057001512e3b583_bucket_tfstate",
   "credentials_file_path": "credentials.json",
   "location": "europe-west1",
-  "project_id": "wedpics"
+  "project_id": "careful-bridge-432408-c6"
 }

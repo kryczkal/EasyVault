@@ -1,9 +1,15 @@
 # Configure terraform to store state in a Google Cloud Storage bucket
 terraform {
   backend "gcs" {
-    bucket = "c5655985262e3142_bucket_tfstate"
+    bucket = "4057001512e3b583_bucket_tfstate"
     prefix = "terraform/state"
   }
+}
+
+provider "google" {
+  project     = local.project_id
+  region      = local.location
+  credentials = file(local.credentials_file_path)
 }
 
 # Google Cloud Storage bucket to store Terraform state
