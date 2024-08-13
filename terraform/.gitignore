@@ -40,3 +40,5 @@ terraform.rc
 # Ignore Terraform plan output files
 tf.plan
 tf.plan.json
+
+**/cloud_functions_zip/*
