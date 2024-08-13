@@ -3,150 +3,123 @@ resource "google_storage_bucket" "function_bucket" {
   name     = "${local.project_id}-function-bucket"
   location = local.location
 }
-# Service account for Cloud Functions
-resource "google_service_account" "function_account" {
-  account_id   = "cloud-function-sa"
-  display_name = "Cloud Functions Service Account"
-}
 
-resource "google_cloudfunctions_function" "hash_gen" {
-  name        = "hash_gen"
-  description = "Generates a unique SHA-512 hash for event buckets"
-  runtime     = "python39"
-
-  available_memory_mb   = 256
-  source_archive_bucket = google_storage_bucket.function_bucket.name
-  source_archive_object = google_storage_bucket_object.function_zip["session_creation/hash_gen"].name
-  trigger_http          = true
-  entry_point           = "hash_gen"
-  service_account_email = google_service_account.function_account.email
-}
-
-# CreateBucket Function
-resource "google_cloudfunctions_function" "create_bucket" {
-  name        = "create_bucket"
-  description = "Creates a new Cloud Storage bucket for an event"
-  runtime     = "python39"
-
-  available_memory_mb   = 256
-  source_archive_bucket = google_storage_bucket.function_bucket.name
-  source_archive_object = google_storage_bucket_object.function_zip["session_creation/create_bucket"].name
-  trigger_http          = true
-  entry_point           = "create_bucket"
-  service_account_email = google_service_account.function_account.email
-}
-
-# IAM binding for CreateBucket function to access Storage Admin role
-resource "google_project_iam_member" "create_bucket_storage_admin" {
-  project = local.project_id
-  role    = "roles/storage.admin"
-  member  = "serviceAccount:${google_service_account.function_account.email}"
-
-  depends_on = [ google_cloudfunctions_function.create_bucket ]
-}
-
-# User Management Function
-# resource "google_cloudfunctions_function" "user_management" {
-#   name        = "user_management"
-#   description = "Manages user creation and authentication"
-#   runtime     = "python39"
-# 
-#   available_memory_mb   = 256
-#   source_archive_bucket = google_storage_bucket.function_bucket.name
-#   source_archive_object = google_storage_bucket_object.function_zip["auth/user_management"].name
-#   trigger_http          = true
-#   entry_point           = "user_management"
-#   service_account_email = google_service_account.function_account.email
-# 
-#   environment_variables = {
-#     INSTANCE_CONNECTION_NAME = google_secret_manager_secret_version.secret_versions["db-connection-name"].name
-#     DB_USER                  = google_secret_manager_secret_version.secret_versions["db-username"].name
-#     DB_PASS                  = google_secret_manager_secret_version.secret_versions["db-password"].name
-#     DB_NAME                  = google_secret_manager_secret_version.secret_versions["db-name"].name
-#     GOOGLE_CLOUD_PROJECT     = local.project_id
-#   }
-# }
-
-# IAM binding for User Management function to access Cloud SQL
-resource "google_project_iam_member" "user_management_cloudsql" {
-  project = local.project_id
-  role    = "roles/cloudsql.client"
-  member  = "serviceAccount:${google_service_account.function_account.email}"
-}
-
-# IAM binding for User Management function to access Firebase Admin SDK
-resource "google_project_iam_member" "user_management_firebase" {
-  project = local.project_id
-  role    = "roles/firebase.admin"
-  member  = "serviceAccount:${google_service_account.function_account.email}"
-}
-
-# Database Setup Function
-resource "google_cloudfunctions_function" "db_setup" {
-  name        = "db_setup"
-  description = "Sets up the database schema"
-  runtime     = "python39"
-
-  available_memory_mb   = 256
-  source_archive_bucket = google_storage_bucket.function_bucket.name
-  source_archive_object = google_storage_bucket_object.function_zip["db/db_setup"].name
-  trigger_http          = true
-  entry_point           = "setup_database"
-  service_account_email = google_service_account.function_account.email
-
-  environment_variables = {
-    DB_CONNECTION_NAME       = google_secret_manager_secret.secrets["db-connection-name"].name
-    DB_USER                  = google_secret_manager_secret.secrets["db-username"].name
-    DB_PASSWORD              = google_secret_manager_secret.secrets["db-password"].name
-    DB_NAME                  = google_secret_manager_secret.secrets["db-name"].name
+locals {
+  functions = {
+    "session_creation" = {
+      description = "Handles the service start event by creating a new bucket for the user and registering it in the database"
+      entry_point = "session_creation"
+      folder      = ""
+      roles       = ["roles/storage.admin", "roles/cloudsql.client"]
+    },
+    "session_deletion" = {
+      description = "Handles the service end event by deleting the user's bucket"
+      entry_point = "session_deletion"
+      folder      = ""
+      roles       = ["roles/storage.admin", "roles/cloudsql.client"]
+    },
+    "create_user" = {
+      description = "Manages user creation"
+      entry_point = "create_user"
+      folder      = "auth/"
+      roles       = ["roles/cloudsql.editor"]
+    },
+    "delete_user" = {
+      description = "Manages user deletion"
+      entry_point = "delete_user"
+      folder      = "auth/"
+      roles       = ["roles/cloudsql.editor"]
+    },
+    "db_setup" = {
+      description = "Sets up the database schema"
+      entry_point = "db_setup"
+      folder      = "db/"
+      roles       = ["roles/cloudsql.admin"]
+    },
   }
 }
 
-# IAM binding for Database Setup function to access Cloud SQL Admin
-resource "google_project_iam_member" "db_setup_cloudsql_admin" {
+# Create service accounts for each Cloud Function
+resource "google_service_account" "function_accounts" {
+  for_each     = local.functions
+  account_id   = "sa-${replace(lower(each.key), "_", "-")}"
+  display_name = "Service Account for ${each.key} function"
+}
+
+# Create Cloud Functions
+resource "google_cloudfunctions_function" "functions" {
+  for_each    = local.functions
+  name        = each.key
+  description = each.value.description
+  runtime     = "python39"
+
+  available_memory_mb   = 256
+  source_archive_bucket = google_storage_bucket.function_bucket.name
+  source_archive_object = google_storage_bucket_object.function_zip[each.key].name
+  trigger_http          = true
+  entry_point           = each.value.entry_point
+  service_account_email = google_service_account.function_accounts[each.key].email
+
+  environment_variables = {
+    DB_CONNECTION_NAME = google_secret_manager_secret.secrets["db-connection-name"].name
+    DB_USER            = google_secret_manager_secret.secrets["db-username"].name
+    DB_PASSWORD        = google_secret_manager_secret.secrets["db-password"].name
+    DB_NAME            = google_secret_manager_secret.secrets["db-name"].name
+  }
+}
+
+# IAM bindings for functions
+resource "google_project_iam_member" "function_roles" {
+  for_each = {
+    for pair in flatten([
+      for func_name, func in local.functions : [
+        for role in func.roles : {
+          func_name = func_name
+          role      = role
+        }
+      ]
+    ]) : "${pair.func_name}-${pair.role}" => pair
+  }
+
   project = local.project_id
-  role    = "roles/cloudsql.admin"
-  member  = "serviceAccount:${google_service_account.function_account.email}"
-  depends_on = [ google_cloudfunctions_function.db_setup ]
+  role    = each.value.role
+  member  = "serviceAccount:${google_service_account.function_accounts[each.value.func_name].email}"
+
+  depends_on = [google_cloudfunctions_function.functions]
 }
 
 # IAM entry for all users to invoke the functions
 resource "google_cloudfunctions_function_iam_member" "invoker" {
-  # for_each       = toset(["hash_gen", "create_bucket", "user_management", "db_setup"])
-  for_each       = toset(["hash_gen", "create_bucket"])
+  for_each       = local.functions
   project        = local.project_id
   region         = local.location
   cloud_function = each.key
 
   role   = "roles/cloudfunctions.invoker"
   member = "allUsers"
+
+  depends_on = [google_cloudfunctions_function.functions]
 }
 
 # Create ZIP archives for Cloud Functions
 data "archive_file" "function_zip" {
-  for_each    = toset(["session_creation/hash_gen", "session_creation/create_bucket", "auth/user_management", "db/db_setup"])
+  for_each    = local.functions
   type        = "zip"
   output_path = "${local.cloud_functions_zip_dir}/${each.key}.zip"
-  source {
-    content  = file("${local.cloud_functions_dir}/${each.key}.py")
-    filename = "main.py"
-  }
-  source {
-    content  = file("${local.cloud_functions_dir}/${each.key}.txt")
-    filename = "requirements.txt"
-  }
+  source_dir  = "${local.cloud_functions_dir}/${each.value.folder}${each.key}"
 }
 
 resource "google_storage_bucket_object" "function_zip" {
-  for_each = toset(["session_creation/hash_gen", "session_creation/create_bucket", "auth/user_management", "db/db_setup"])
+  for_each = local.functions
   name     = "${each.key}.zip"
   bucket   = google_storage_bucket.function_bucket.name
   source   = data.archive_file.function_zip[each.key].output_path
 }
 
-# Grant Secret Manager Secret Accessor role to the Cloud Functions service account
+# Grant Secret Manager Secret Accessor role to each Cloud Function's service account
 resource "google_project_iam_member" "secret_accessor" {
-  project = local.project_id
-  role    = "roles/secretmanager.secretAccessor"
-  member  = "serviceAccount:${google_service_account.function_account.email}"
+  for_each = local.functions
+  project  = local.project_id
+  role     = "roles/secretmanager.secretAccessor"
+  member   = "serviceAccount:${google_service_account.function_accounts[each.key].email}"
 }
