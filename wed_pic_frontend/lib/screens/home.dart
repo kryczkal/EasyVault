@@ -3,6 +3,8 @@ import 'package:wed_pic_frontend/models/media.dart';
 import 'package:wed_pic_frontend/screens/session_explorer.dart';
 
 class Home extends StatelessWidget {
+  const Home({super.key});
+
   @override
   Widget build(BuildContext context) {
     final List<Media> mediaItems = [

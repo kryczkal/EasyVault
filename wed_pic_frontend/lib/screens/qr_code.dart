@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class QrCodePage extends StatelessWidget {
-  const QrCodePage({Key? key}) : super(key: key);
+  const QrCodePage({super.key});
 
   @override
   Widget build(BuildContext context) {
