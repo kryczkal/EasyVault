@@ -5,7 +5,7 @@ import 'package:wed_pic_frontend/models/media.dart';
 class MediaGallery extends StatefulWidget {
   final List<Media> mediaItems;
 
-  const MediaGallery({Key? key, required this.mediaItems}) : super(key: key);
+  const MediaGallery({super.key, required this.mediaItems});
 
   @override
   _MediaGalleryState createState() => _MediaGalleryState();
