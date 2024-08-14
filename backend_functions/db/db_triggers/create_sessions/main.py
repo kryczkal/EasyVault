@@ -34,12 +34,7 @@ def create_sessions(request):
                     json={'order_id': order_id},
                     headers={'Content-Type': 'application/json'}
                 )
-                if response.status_code == 200:
-                    conn.execute(
-                        sqlalchemy.text("UPDATE orders SET status = 'active' WHERE id = :order_id"),
-                        {'order_id': order_id}
-                    )
-                else:
+                if response.status_code != 200:
                     print(f"Failed to create session for order {order_id}: {response.text}")
 
             conn.commit()
