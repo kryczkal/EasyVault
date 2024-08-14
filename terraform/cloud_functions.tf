@@ -5,42 +5,58 @@ locals {
       entry_point = "session_creation"
       folder      = "buckets/"
       roles       = ["roles/storage.admin", "roles/cloudsql.client"]
+      environment = {}
     },
     "session_deletion" = {
       description = "Handles the service end event by deleting the user's bucket"
       entry_point = "session_deletion"
       folder      = "buckets/"
       roles       = ["roles/storage.admin", "roles/cloudsql.client"]
+      environment = {}
     },
     "create_user" = {
       description = "Manages user creation"
       entry_point = "create_user"
       folder      = "db/users/"
       roles       = ["roles/cloudsql.editor"]
+      environment = {}
     },
     "delete_user" = {
       description = "Manages user deletion"
       entry_point = "delete_user"
       folder      = "db/users/"
       roles       = ["roles/cloudsql.editor"]
+      environment = {}
     },
     "create_order" = {
       description = "Manages order creation"
       entry_point = "create_order"
       folder      = "db/orders/"
       roles       = ["roles/cloudsql.editor"]
+      environment = {}
     },
     "delete_order" = {
       description = "Manages order deletion"
       entry_point = "delete_order"
       folder      = "db/orders/"
       roles       = ["roles/cloudsql.editor"]
+      environment = {}
     },
     "db_setup" = {
       description = "Sets up the database schema"
       entry_point = "db_setup"
       folder      = "db/"
       roles       = ["roles/cloudsql.admin"]
+      environment = {}
+    },
+    "auto_sessions" = {
+      description = "Activates pending orders that have started"
+      entry_point = "auto_sessions"
+      folder      = "db/db_triggers/"
+      roles       = ["roles/cloudsql.client"]
+      environment = {
+        GCF_SESSION_CREATION_NAME = "session-creation"
+      }
     },
   }
 
@@ -56,6 +72,11 @@ locals {
     "roles/secretmanager.secretAccessor",
     "roles/logging.logWriter"
   ]
+
+  common_environment = {
+    GCP_PROJECT_ID = local.project_id
+    GCP_REGION = local.location
+  }
 }
 
 # Cloud Storage bucket for storing Cloud Functions source code
@@ -127,6 +148,11 @@ resource "google_cloudfunctions2_function" "functions" {
     all_traffic_on_latest_revision = true
     service_account_email = google_service_account.function_accounts[each.key].email
 
+    environment_variables = merge(
+      local.common_environment,
+      each.value.environment
+    )
+
     secret_environment_variables {
       key = "DB_CONNECTION_NAME"
       project_id = local.project_id
@@ -153,12 +179,11 @@ resource "google_cloudfunctions2_function" "functions" {
     }
   }
 
-  depends_on = [ 
-    data.archive_file.function_zip,
+  depends_on = [
     google_storage_bucket_object.function_zip,
     google_service_account.function_accounts,
-    google_project_iam_member.function_roles
-    ]
+    google_project_iam_member.function_roles,
+  ]
 
     # Update the function when the source code changes
     lifecycle {
