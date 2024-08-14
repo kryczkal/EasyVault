@@ -33,10 +33,9 @@ def create_order(request):
     try:
         db = connect_to_db()
         with db.connect() as conn:
-            order_date = sqlalchemy.func.now()
             result = conn.execute(
-                sqlalchemy.text("INSERT INTO orders (user_id, order_date, start_service, end_service, total_amount) VALUES (:user_id, :order_date, :start_service, :end_service, :total_amount) RETURNING id"),
-                {"user_id": user_id, "order_date": order_date, "start_service": start_service, "end_service": end_service, "total_amount": total_amount}
+                sqlalchemy.text("INSERT INTO orders (user_id, start_service, end_service, total_amount) VALUES (:user_id, :start_service, :end_service, :total_amount) RETURNING id"),
+                {"user_id": user_id, "start_service": start_service, "end_service": end_service, "total_amount": total_amount}
             )
 
             new_order_id = result.fetchone()[0]

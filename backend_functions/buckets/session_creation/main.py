@@ -15,7 +15,7 @@ def session_creation(request):
         
         order_id = request_json.get('order_id')
         
-        if not all([order_id]):
+        if not order_id:
             return 'Missing required fields: order_id', 400
 
     except Exception as e:
@@ -26,32 +26,35 @@ def session_creation(request):
         # Generate unique bucket_id
         bucket_id = hash_gen()
         with db.connect() as conn:
-            query = f'SELECT * FROM orders WHERE bucket_id = "{bucket_id}"'
-            result = conn.execute(query)
+            query = f"SELECT * FROM orders WHERE bucket_id = '{bucket_id}'"
+            result = conn.execute(sqlalchemy.text(query))
             while result.fetchone():
                 bucket_id = hash_gen()
 
         # Create bucket
         create_bucket(bucket_id)
 
-        # Insert bucket_id into order with order_id and update status to active
+        # update bucket_id and status in orders table
         with db.connect() as conn:
-            query = f'INSERT INTO orders (bucket_id) VALUES ("{bucket_id}")'
-            conn.execute(query)
-            query = f'UPDATE orders SET status = "active" WHERE id = "{order_id}"'
-            conn.execute(query)
+            query = f"UPDATE orders SET bucket_id = '{bucket_id}' WHERE id = '{order_id}'"
+            conn.execute(sqlalchemy.text(query))
+            query = f"UPDATE orders SET status = 'active' WHERE id = '{order_id}'"
+            conn.execute(sqlalchemy.text(query))
 
+        # Retrieve the user's email associated with the order
         with db.connect() as conn:
-            query = f'SELECT u.email FROM orders o JOIN users u ON o.user_id = u.id WHERE o.id = "{order_id}"'
-            result = conn.execute(query)
+            query = f"SELECT u.email FROM orders o JOIN users u ON o.user_id = u.id WHERE o.id = '{order_id}'"
+            result = conn.execute(sqlalchemy.text(query))
             email = result.fetchone()[0]
         
         if not email:
             raise ValueError(f'No email found for order ID: {order_id}')
 
+        # Send email to the user
         email_user(email, bucket_id)
             
         return f'Bucket created with ID: {bucket_id} for order {order_id} and email sent to {email}', 200
+
     except sqlalchemy.exc.OperationalError as e:
         return f'Database connection error: {str(e)}', 500
     except Exception as e:
