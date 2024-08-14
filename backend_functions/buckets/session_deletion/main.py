@@ -4,6 +4,7 @@ import sqlalchemy
 from connect_to_db import connect_to_db
 from delete_bucket import delete_bucket
 
+#
 @functions_framework.http
 def session_deletion(request):
     try:
@@ -23,8 +24,8 @@ def session_deletion(request):
         db = connect_to_db()
         # find the bucket_id from the order_id
         with db.connect() as conn:
-            query = f'SELECT bucket_id FROM orders WHERE id = "{order_id}"'
-            result = conn.execute(query)
+            query = f"SELECT bucket_id FROM orders WHERE id = '{order_id}'"
+            result = conn.execute(sqlalchemy.text(query))
             bucket_id = result.fetchone()[0]
         
         if not bucket_id:

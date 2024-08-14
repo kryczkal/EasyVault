@@ -13,28 +13,34 @@ def db_setup(request):
             
             print("Executing CREATE TABLE statement...")
             conn.execute(sqlalchemy.text("""
-                -- Create users table
+                CREATE TYPE order_status AS ENUM ('pending', 'active', 'completed', 'canceled');
+
+                -- Users table
                 CREATE TABLE IF NOT EXISTS users (
                     id SERIAL PRIMARY KEY,
                     google_id VARCHAR(255) UNIQUE NOT NULL,
                     email VARCHAR(255) UNIQUE NOT NULL,
-                    name VARCHAR(255)
+                    name VARCHAR(255),
+                    CONSTRAINT check_email_format CHECK (email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z]{2,}$')
                 );
 
-                -- Create orders table
+                -- Orders table
                 CREATE TABLE IF NOT EXISTS orders (
                     id SERIAL PRIMARY KEY,
-                    user_id INTEGER REFERENCES users(id),
-                    order_date TIMESTAMP,
-                    start_service TIMESTAMP,
-                    end_service TIMESTAMP,
-                    status VARCHAR(255) DEFAULT 'pending',
-                    total_amount DECIMAL(10, 2),
-                    bucket_id CHAR(40)
+                    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                    order_date TIMESTAMPTZ DEFAULT NOW(),
+                    start_service TIMESTAMPTZ NOT NULL,
+                    end_service TIMESTAMPTZ NOT NULL,
+                    status order_status DEFAULT 'pending',
+                    total_amount DECIMAL(10, 2) CHECK (total_amount >= 0),
+                    bucket_id CHAR(40),
+                    CONSTRAINT check_service_dates CHECK (end_service > start_service)
                 );
 
-                -- Add a check constraint to ensure end_service is after start_service
-                ALTER TABLE orders ADD CONSTRAINT check_service_dates CHECK (end_service > start_service);
+                -- Indexes
+                CREATE INDEX idx_orders_user_id ON orders(user_id);
+                CREATE INDEX idx_orders_status ON orders(status);
+                CREATE INDEX idx_orders_status_order_date ON orders(status, order_date);
             """))
             print("CREATE TABLE statement executed")
             
