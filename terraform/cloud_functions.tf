@@ -15,25 +15,25 @@ locals {
     "create_user" = {
       description = "Manages user creation"
       entry_point = "create_user"
-      folder      = "auth/"
+      folder      = "db/users/"
       roles       = ["roles/cloudsql.editor"]
     },
     "delete_user" = {
       description = "Manages user deletion"
       entry_point = "delete_user"
-      folder      = "auth/"
+      folder      = "db/users/"
       roles       = ["roles/cloudsql.editor"]
     },
     "create_order" = {
       description = "Manages order creation"
       entry_point = "create_order"
-      folder      = "orders/"
+      folder      = "db/orders/"
       roles       = ["roles/cloudsql.editor"]
     },
     "delete_order" = {
       description = "Manages order deletion"
       entry_point = "delete_order"
-      folder      = "orders/"
+      folder      = "db/orders/"
       roles       = ["roles/cloudsql.editor"]
     },
     "db_setup" = {
@@ -42,12 +42,6 @@ locals {
       folder      = "db/"
       roles       = ["roles/cloudsql.admin"]
     },
-    # "create_sessions" = {
-    #   description = "Checks for new sessions and creates them"
-    #   entry_point = "create_sessions"
-    #   folder      = "db/db_triggers/"
-    #   roles       = ["roles/cloudsql.client"]
-    # }
   }
 
   common_roles = [
