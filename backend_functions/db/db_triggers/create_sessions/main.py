@@ -4,11 +4,6 @@ import sqlalchemy
 import requests
 from google.cloud import secretmanager
 
-def access_secret_version(secret_name) -> str:
-    client = secretmanager.SecretManagerServiceClient()
-    response = client.access_secret_version(request={"name": f"{secret_name}/versions/latest"})
-    return response.payload.data.decode("UTF-8")
-
 from connect_to_db import connect_to_db
 @functions_framework.http
 def create_sessions(request):
@@ -22,7 +17,7 @@ def create_sessions(request):
             if not orders:
                 return 'No orders to create sessions for', 200
             
-            session_creation_url = access_secret_version(os.environ.get("SESSION_CREATION_URL"))
+            session_creation_url = os.environ.get("SESSION_CREATION_URL")
             if not session_creation_url:
                 return 'Session creation URL not found', 500
 
