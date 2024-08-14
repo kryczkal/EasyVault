@@ -28,6 +28,7 @@ def db_setup(request):
                     order_date TIMESTAMP,
                     start_service TIMESTAMP,
                     end_service TIMESTAMP,
+                    status VARCHAR(255) DEFAULT 'pending',
                     total_amount DECIMAL(10, 2),
                     bucket_id CHAR(40)
                 );
