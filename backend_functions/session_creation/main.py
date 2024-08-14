@@ -34,9 +34,11 @@ def session_creation(request):
         # Create bucket
         create_bucket(bucket_id)
 
-        # Insert bucket_id into order with order_id
+        # Insert bucket_id into order with order_id and update status to active
         with db.connect() as conn:
             query = f'INSERT INTO orders (bucket_id) VALUES ("{bucket_id}")'
+            conn.execute(query)
+            query = f'UPDATE orders SET status = "active" WHERE id = "{order_id}"'
             conn.execute(query)
 
         with db.connect() as conn:
