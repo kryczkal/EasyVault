@@ -4,6 +4,7 @@ import sqlalchemy
 from connect_to_db import connect_to_db
 from create_bucket import create_bucket
 from hash_gen import hash_gen
+from email_user import email_user
 
 @functions_framework.http
 def session_creation(request):
@@ -37,8 +38,18 @@ def session_creation(request):
         with db.connect() as conn:
             query = f'INSERT INTO orders (bucket_id) VALUES ("{bucket_id}")'
             conn.execute(query)
+
+        with db.connect() as conn:
+            query = f'SELECT u.email FROM orders o JOIN users u ON o.user_id = u.id WHERE o.id = "{order_id}"'
+            result = conn.execute(query)
+            email = result.fetchone()[0]
+        
+        if not email:
+            raise ValueError(f'No email found for order ID: {order_id}')
+
+        email_user(email, bucket_id)
             
-        return f'Bucket created with ID: {bucket_id} for order {order_id}', 200
+        return f'Bucket created with ID: {bucket_id} for order {order_id} and email sent to {email}', 200
     except sqlalchemy.exc.OperationalError as e:
         return f'Database connection error: {str(e)}', 500
     except Exception as e:

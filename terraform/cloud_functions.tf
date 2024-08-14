@@ -37,6 +37,15 @@ locals {
       roles       = ["roles/cloudsql.admin"]
     },
   }
+
+  common_environment_variables = {
+    DB_CONNECTION_NAME = google_secret_manager_secret.secrets["db-connection-name"].name
+    DB_USER            = google_secret_manager_secret.secrets["db-username"].name
+    DB_PASSWORD        = google_secret_manager_secret.secrets["db-password"].name
+    DB_NAME            = google_secret_manager_secret.secrets["db-name"].name
+  }
+
+  common_roles = ["roles/cloudfunctions.invoker", "roles/secretmanager.secretAccessor"]
 }
 
 # Create service accounts for each Cloud Function
@@ -66,37 +75,34 @@ resource "google_cloudfunctions_function" "functions" {
     DB_PASSWORD        = google_secret_manager_secret.secrets["db-password"].name
     DB_NAME            = google_secret_manager_secret.secrets["db-name"].name
   }
+
+  depends_on = [google_storage_bucket_object.function_zip]
 }
 
 # IAM bindings for functions
 resource "google_project_iam_member" "function_roles" {
   for_each = {
     for pair in flatten([
-      for func_name, func in local.functions : [
+      for func_name, func in local.functions : concat(
+        [
         for role in func.roles : {
           func_name = func_name
           role      = role
         }
+      ],
+      [
+        for role in local.common_roles : {
+          func_name = func_name
+          role      = role
+        }
       ]
+      )
     ]) : "${pair.func_name}-${pair.role}" => pair
   }
 
   project = local.project_id
   role    = each.value.role
   member  = "serviceAccount:${google_service_account.function_accounts[each.value.func_name].email}"
-
-  depends_on = [google_cloudfunctions_function.functions]
-}
-
-# IAM entry for all users to invoke the functions
-resource "google_cloudfunctions_function_iam_member" "invoker" {
-  for_each       = local.functions
-  project        = local.project_id
-  region         = local.location
-  cloud_function = each.key
-
-  role   = "roles/cloudfunctions.invoker"
-  member = "allUsers"
 
   depends_on = [google_cloudfunctions_function.functions]
 }
@@ -114,12 +120,4 @@ resource "google_storage_bucket_object" "function_zip" {
   name     = "${each.key}.zip"
   bucket   = google_storage_bucket.function_bucket.name
   source   = data.archive_file.function_zip[each.key].output_path
-}
-
-# Grant Secret Manager Secret Accessor role to each Cloud Function's service account
-resource "google_project_iam_member" "secret_accessor" {
-  for_each = local.functions
-  project  = local.project_id
-  role     = "roles/secretmanager.secretAccessor"
-  member   = "serviceAccount:${google_service_account.function_accounts[each.key].email}"
 }
