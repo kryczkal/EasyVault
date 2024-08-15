@@ -7,6 +7,7 @@ from connect_to_db import connect_to_db
 @functions_framework.http
 def create_user(request):
     try:
+        # Parse request JSON
         request_json = request.get_json(silent=True)
         if not request_json:
             return 'No JSON data in request', 400
@@ -31,7 +32,7 @@ def create_user(request):
             if existing_user:
                 return f'User already exists with id: {existing_user[0]}', 200
 
-            # Create new user
+            # Create new user and return new user ID
             result = conn.execute(
                 sqlalchemy.text("INSERT INTO users (google_id, email, name) VALUES (:google_id, :email, :name) RETURNING id"),
                 {"google_id": google_id, "email": email, "name": name}
@@ -40,6 +41,8 @@ def create_user(request):
             conn.commit()
 
             return f'User created with id: {new_user_id}', 201
+    except sqlalchemy.exc.IntegrityError as e:
+        return f'Database integrity error: {str(e)}', 400
     except sqlalchemy.exc.OperationalError as e:
         return f'Database connection error: {str(e)}', 500
     except Exception as e:

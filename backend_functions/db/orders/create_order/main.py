@@ -32,6 +32,7 @@ def create_order(request):
 
     try:
         db = connect_to_db()
+        print("Connection established")
         with db.connect() as conn:
             result = conn.execute(
                 sqlalchemy.text("INSERT INTO orders (user_id, start_service, end_service, total_amount) VALUES (:user_id, :start_service, :end_service, :total_amount) RETURNING id"),
