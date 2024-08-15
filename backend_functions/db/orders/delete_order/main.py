@@ -27,8 +27,9 @@ def delete_order(request):
     try:
         db = connect_to_db()
         with db.connect() as conn:
+            print("Connection established")
             query = f'DELETE FROM orders WHERE id = "{order_id}"'
-            conn.execute(query)
+            conn.execute(sqlalchemy.text(query))
             if conn.rowcount == 0:
                 return f'Order does not exist with id: {order_id}', 404
             conn.commit()

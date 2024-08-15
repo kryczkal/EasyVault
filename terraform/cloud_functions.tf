@@ -4,14 +4,14 @@ locals {
       description = "Handles the service start event by creating a new bucket for the user and registering it in the database"
       entry_point = "session_creation"
       folder      = "buckets/"
-      roles       = ["roles/storage.admin", "roles/cloudsql.client"]
+      roles       = ["roles/storage.admin", "roles/cloudsql.editor"]
       environment = {}
     },
     "session_deletion" = {
       description = "Handles the service end event by deleting the user's bucket"
       entry_point = "session_deletion"
       folder      = "buckets/"
-      roles       = ["roles/storage.admin", "roles/cloudsql.client"]
+      roles       = ["roles/storage.admin", "roles/cloudsql.editor"]
       environment = {}
     },
     "create_user" = {
@@ -56,9 +56,28 @@ locals {
       roles       = ["roles/cloudsql.client"]
       environment = {
         GCF_SESSION_CREATION_NAME = "session-creation"
-      }
+        GCF_SESSION_DELETION_NAME = "session-deletion"
+      },
+    },
+    "list_bucket_files" = {
+        description = "Fetches files from the user's bucket"
+        entry_point = "list_bucket_files"
+        folder      = "buckets/"
+        roles       = ["roles/storage.admin"]
+        environment = {}
+    },
+    "db_state" = {
+        description = "Fetches the current state of the database"
+        entry_point = "db_state"
+        folder      = "db/"
+        roles       = ["roles/cloudsql.client"]
+        environment = {}
     },
   }
+
+  public_function_names = [
+    "list_bucket_files",
+  ]
 
   common_roles = [
     "roles/cloudfunctions.invoker",
@@ -81,7 +100,7 @@ locals {
 
 # Cloud Storage bucket for storing Cloud Functions source code
 resource "google_storage_bucket" "function_bucket" {
-  name     = "${local.project_id}-gcf-source"
+  name     = "gcf-source-${local.project_id}"
   location = local.location
   uniform_bucket_level_access = true
 }
@@ -270,4 +289,21 @@ resource "null_resource" "deploy_new_cloud_run_revision" {
       google_sql_database_instance.event_db
     ]
   }
+}
+
+# Enable public access to the Cloud Run service
+resource "null_resource" "allow_unauthenticated" {
+  for_each = toset(local.public_function_names)
+
+  provisioner "local-exec" {
+    command = <<EOT
+      gcloud run services add-iam-policy-binding ${replace(lower(each.value), "_", "-")} \
+      --region=${local.location} \
+      --member="allUsers" \
+      --role="roles/run.invoker" \
+      --platform=managed
+    EOT
+  }
+
+  depends_on = [google_cloudfunctions2_function.functions]
 }
