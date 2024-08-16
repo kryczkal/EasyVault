@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:wed_pic_frontend/models/media.dart';
+import 'package:wed_pic_frontend/models/Media.dart';
 
 class MediaGallery extends StatefulWidget {
-  final List<Media> mediaItems;
+  final Future<List<Media>> mediaItems;
 
   const MediaGallery({super.key, required this.mediaItems});
 
@@ -22,7 +22,23 @@ class _MediaGalleryState extends State<MediaGallery> {
           children: [
             _buildTopBar(),
             Expanded(
-              child: _isGridView ? _buildGridView() : _buildListView(),
+              child: FutureBuilder<List<Media>>(
+                future: widget.mediaItems,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return const Center(child: Text('No media found.'));
+                  }
+
+                  final mediaItems = snapshot.data!;
+                  return _isGridView
+                      ? _buildGridView(mediaItems)
+                      : _buildListView(mediaItems);
+                },
+              ),
             ),
           ],
         ),
@@ -71,7 +87,7 @@ class _MediaGalleryState extends State<MediaGallery> {
     );
   }
 
-  Widget _buildGridView() {
+  Widget _buildGridView(List<Media> mediaItems) {
     return LayoutBuilder(
       builder: (context, constraints) {
         int crossAxisCount = _getCrossAxisCount(constraints.maxWidth);
@@ -84,9 +100,9 @@ class _MediaGalleryState extends State<MediaGallery> {
               crossAxisSpacing: 8,
               mainAxisSpacing: 8,
             ),
-            itemCount: widget.mediaItems.length,
+            itemCount: mediaItems.length,
             itemBuilder: (context, index) {
-              return _buildMediaItem(widget.mediaItems[index]);
+              return _buildMediaItem(mediaItems[index]);
             },
           ),
         );
@@ -149,11 +165,11 @@ class _MediaGalleryState extends State<MediaGallery> {
     );
   }
 
-  Widget _buildListView() {
+  Widget _buildListView(List<Media> mediaItems) {
     return ListView.builder(
-      itemCount: widget.mediaItems.length,
+      itemCount: mediaItems.length,
       itemBuilder: (context, index) {
-        return _buildListItem(widget.mediaItems[index]);
+        return _buildListItem(mediaItems[index]);
       },
     );
   }
