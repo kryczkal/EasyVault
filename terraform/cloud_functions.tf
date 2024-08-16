@@ -75,9 +75,9 @@ locals {
     },
   }
 
-  public_function_names = [
-    "list_bucket_files",
-  ]
+  public_function_names = {
+    "list_bucket_files" = {},
+  }
 
   common_roles = [
     "roles/cloudfunctions.invoker",
@@ -293,11 +293,11 @@ resource "null_resource" "deploy_new_cloud_run_revision" {
 
 # Enable public access to the Cloud Run service
 resource "null_resource" "allow_unauthenticated" {
-  for_each = toset(local.public_function_names)
+  for_each = local.public_function_names
 
   provisioner "local-exec" {
     command = <<EOT
-      gcloud run services add-iam-policy-binding ${replace(lower(each.value), "_", "-")} \
+      gcloud run services add-iam-policy-binding ${replace(lower(each.key), "_", "-")} \
       --region=${local.location} \
       --member="allUsers" \
       --role="roles/run.invoker" \
@@ -306,4 +306,10 @@ resource "null_resource" "allow_unauthenticated" {
   }
 
   depends_on = [google_cloudfunctions2_function.functions]
+
+  lifecycle {
+    replace_triggered_by = [
+      google_cloudfunctions2_function.functions[each.key]
+    ]
+  }
 }
