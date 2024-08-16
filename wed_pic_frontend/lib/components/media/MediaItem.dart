@@ -20,7 +20,6 @@ class MediaItem extends StatelessWidget {
           if (media.type == 'image')
             GestureDetector(
               onTap: () {
-                // Navigate to the image viewer screen
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -40,7 +39,6 @@ class MediaItem extends StatelessWidget {
             VideoThumbnailDisplay(
               videoUrl: media.url,
               onVideoTapped: () {
-                // Trigger your VideoTapped business logic here
                 Navigator.push(
                   context,
                   MaterialPageRoute(

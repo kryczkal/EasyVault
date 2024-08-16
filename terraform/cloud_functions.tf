@@ -66,6 +66,20 @@ locals {
         roles       = ["roles/storage.admin"]
         environment = {}
     },
+    "upload_chunk" = {
+        description = "Uploads a chunk of a file to the user's bucket"
+        entry_point = "upload_chunk"
+        folder      = "buckets/upload_file/"
+        roles       = ["roles/storage.admin"]
+        environment = {}
+    },
+    "upload_finalize" = {
+        description = "Finalizes the file upload"
+        entry_point = "upload_finalize"
+        folder      = "buckets/upload_file/"
+        roles       = ["roles/storage.admin"]
+        environment = {}
+    },
     "db_state" = {
         description = "Fetches the current state of the database"
         entry_point = "db_state"
@@ -77,6 +91,8 @@ locals {
 
   public_function_names = {
     "list_bucket_files" = {},
+    "upload_chunk" = {},
+    "upload_finalize" = {},
   }
 
   common_roles = [

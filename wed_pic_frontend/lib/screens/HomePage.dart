@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:wed_pic_frontend/services/BackendService.dart';
-import 'package:wed_pic_frontend/services/BackendSettings.dart';
-import 'package:wed_pic_frontend/services/IClientService.dart';
+import 'package:wed_pic_frontend/services/ApiClient.dart';
+import 'package:wed_pic_frontend/services/ApiSettings.dart';
+import 'package:wed_pic_frontend/services/IApiClient.dart';
 
 class HomePage extends StatefulWidget {
   static const String route = '/';
 
-  IClientService client = BackendService(BackendConstants().apiUrl);
+  IApiClient client = ApiClient(ApiSettings.apiUrl);
 
   HomePage({super.key});
 
@@ -29,9 +29,9 @@ class _HomePageState extends State<HomePage> {
     if (screenWidth < 600) {
       return 48;
     } else if (screenWidth < 900) {
-      return 60;
-    } else {
       return 72;
+    } else {
+      return 96;
     }
   }
 
@@ -55,8 +55,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(
-                  height: 50), // Spacing between title and input field
+              const SizedBox(height: 50),
               ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 600),
                 child: Row(
@@ -81,7 +80,7 @@ class _HomePageState extends State<HomePage> {
                         onSubmitted: (value) => _navigateToSession(),
                       ),
                     ),
-                    const SizedBox(width: 10), // Space between input and button
+                    const SizedBox(width: 10),
                     ElevatedButton(
                       onPressed: _navigateToSession,
                       style: ElevatedButton.styleFrom(

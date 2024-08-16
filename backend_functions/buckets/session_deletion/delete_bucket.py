@@ -7,5 +7,8 @@ def delete_bucket(id : str):
     bucket = storage_client.get_bucket(bucket_name)
     bucket.delete()
 
+    bucket = storage_client.get_bucket(f'file-chunks-{id}')
+    bucket.delete()
+
     return f'Bucket {bucket.name} deleted.'
     

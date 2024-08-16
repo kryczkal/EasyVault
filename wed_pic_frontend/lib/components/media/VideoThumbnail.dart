@@ -29,7 +29,6 @@ class _VideoThumbnailDisplayState extends State<VideoThumbnailDisplay> {
         child: Container(
           width: widget.width,
           height: widget.height,
-          // A fitting BoxDecoration,that doesn't use the videoUrl
           decoration: const BoxDecoration(
             color: Colors.black,
           ),
