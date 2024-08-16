@@ -15,18 +15,28 @@ class MediaGalleryTopBar extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           IconButton(
-            icon: Icon(isGridView ? Icons.list : Icons.grid_view),
-            onPressed: onViewToggle,
-          ),
-          IconButton(
-            icon: const Icon(Icons.download),
+            icon: const Icon(Icons.arrow_back),
             onPressed: () {
-              // TODO: Implement download functionality
-              print('Download button pressed');
+              Navigator.pop(context);
             },
+          ),
+          Row(
+            children: [
+              IconButton(
+                icon: Icon(isGridView ? Icons.list : Icons.grid_view),
+                onPressed: onViewToggle,
+              ),
+              IconButton(
+                icon: const Icon(Icons.download),
+                onPressed: () {
+                  // TODO: Implement download functionality
+                  print('Download button pressed');
+                },
+              ),
+            ],
           ),
         ],
       ),

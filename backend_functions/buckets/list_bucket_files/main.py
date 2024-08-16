@@ -1,6 +1,6 @@
 import functions_framework
 from google.cloud import storage
-from flask import jsonify, abort
+from flask import jsonify, abort, make_response
 
 from utils import validate_image, validate_video
 
@@ -40,7 +40,16 @@ def list_bucket_files(request):
             }
             files.append(file_info)
         
-        return jsonify(files), 200
+        response = make_response(jsonify(files), 200)
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Access-Control-Allow-Methods"] = "GET, POST"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+
+        return response
     
     except Exception as e:
-        return abort(500, description=f"An error occurred: {str(e)}")
+        response = make_response(
+            jsonify({"error": f"An error occurred: {str(e)}"}), 500
+        )
+        response.headers["Access-Control-Allow-Origin"] = "https://careful-bridge-432408-c6.ew.r.appspot.com/"
+        return response

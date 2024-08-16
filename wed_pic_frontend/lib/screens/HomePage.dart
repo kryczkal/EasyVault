@@ -24,41 +24,79 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  // Set the title font size depending on the screen size
+  double _getTitleFontSize(double screenWidth) {
+    if (screenWidth < 600) {
+      return 48;
+    } else if (screenWidth < 900) {
+      return 60;
+    } else {
+      return 72;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.all(32.0),
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              const Text(
+              Text(
                 'WedPics',
                 style: TextStyle(
-                  fontSize: 48,
-                  fontWeight: FontWeight.bold,
+                  fontSize:
+                      _getTitleFontSize(MediaQuery.of(context).size.width),
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 2,
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 50),
-              TextField(
-                controller: _controller,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Input a session ID',
-                ),
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 24),
-                onSubmitted: (value) => _navigateToSession(),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _navigateToSession,
-                child: const Text(
-                  'Go to Session',
-                  style: TextStyle(fontSize: 24),
+              const SizedBox(
+                  height: 50), // Spacing between title and input field
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 600),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _controller,
+                        decoration: InputDecoration(
+                          hintText: 'Enter session ID',
+                          filled: true,
+                          fillColor: Colors.grey[200],
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30),
+                            borderSide: BorderSide.none,
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: 16.0, horizontal: 20.0),
+                        ),
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontSize: 18),
+                        onSubmitted: (value) => _navigateToSession(),
+                      ),
+                    ),
+                    const SizedBox(width: 10), // Space between input and button
+                    ElevatedButton(
+                      onPressed: _navigateToSession,
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 16.0, horizontal: 24.0),
+                      ),
+                      child: const Text(
+                        'Go',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
