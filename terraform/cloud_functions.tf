@@ -75,6 +75,22 @@ locals {
         environment = {}
       mem = "256Mi"
     },
+    "list_bucket_files_2" = {
+        description = "Fetches files from the user's bucket"
+        entry_point = "list_bucket_files_2"
+        folder      = "buckets/"
+        roles       = ["roles/storage.admin"]
+        environment = {}
+      mem = "256Mi"
+    },
+    "proxy_file" = {
+        description = "Proxies a file from the user's bucket"
+        entry_point = "proxy_file"
+        folder      = "buckets/"
+        roles       = ["roles/storage.admin"]
+        environment = {}
+      mem = "4Gi"
+    },
     "upload_chunk" = {
         description = "Uploads a chunk of a file to the user's bucket"
         entry_point = "upload_chunk"
@@ -103,8 +119,10 @@ locals {
 
   public_function_names = {
     "list_bucket_files" = {},
+    "list_bucket_files_2" = {},
     "upload_chunk" = {},
     "upload_finalize" = {},
+    "proxy_file" = {},
   }
 
   common_roles = [
