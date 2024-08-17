@@ -51,5 +51,5 @@ def list_bucket_files(request):
         response = make_response(
             jsonify({"error": f"An error occurred: {str(e)}"}), 500
         )
-        response.headers["Access-Control-Allow-Origin"] = "https://careful-bridge-432408-c6.ew.r.appspot.com/"
+        response.headers["Access-Control-Allow-Origin"] = "*"
         return response

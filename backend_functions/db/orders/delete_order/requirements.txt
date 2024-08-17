@@ -2,3 +2,4 @@ google-cloud-secret-manager
 functions-framework
 sqlalchemy
 pg8000
+Flask

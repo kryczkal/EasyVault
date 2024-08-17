@@ -31,6 +31,10 @@ class _SessionPageState extends State<SessionPage> {
       _sessionManager?.setSessionId(widget.sessionId);
     });
 
+    fetchMedia();
+  }
+
+  void fetchMedia() {
     var requestUrl =
         '${ApiSettings.fetchMediaEndpoint}?bucket_id=${widget.sessionId}';
 
@@ -51,6 +55,9 @@ class _SessionPageState extends State<SessionPage> {
       Logger().e('Failed to load media items: $e');
       mediaItems = Future.value([]);
     }
+    setState(() {
+      mediaItems = mediaItems;
+    });
   }
 
   @override
@@ -62,7 +69,7 @@ class _SessionPageState extends State<SessionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: MediaGallery(mediaItems: mediaItems),
+      body: MediaGallery(mediaItems: mediaItems, refreshGallery: fetchMedia),
     );
   }
 }

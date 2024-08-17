@@ -1,9 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:wed_pic_frontend/components/media/ImageViewerScreen.dart';
 import 'package:wed_pic_frontend/components/media/VideoThumbnail.dart';
 import 'package:wed_pic_frontend/components/media/VideoViewerScreen.dart';
 import 'package:wed_pic_frontend/models/Media.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:wed_pic_frontend/utils/FormatBytes.dart';
 
 class MediaItem extends StatelessWidget {
   final Media media;
@@ -65,7 +68,7 @@ class MediaItem extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    media.size,
+                    formatBytes(media.size),
                     style: const TextStyle(color: Colors.white70, fontSize: 12),
                   ),
                 ],

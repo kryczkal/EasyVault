@@ -1,15 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:wed_pic_frontend/GeneralSettings.dart';
+import 'package:wed_pic_frontend/states/SessionManager.dart';
+import 'package:provider/provider.dart';
 
-class MediaGalleryTopBar extends StatelessWidget {
+class MediaGalleryTopBar extends StatefulWidget {
   final bool isGridView;
   final VoidCallback onViewToggle;
+  final VoidCallback refreshGallery;
 
   const MediaGalleryTopBar({
     super.key,
     required this.isGridView,
     required this.onViewToggle,
+    required this.refreshGallery,
   });
 
+  @override
+  State<MediaGalleryTopBar> createState() => _MediaGalleryTopBarState();
+}
+
+class _MediaGalleryTopBarState extends State<MediaGalleryTopBar> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -26,8 +37,12 @@ class MediaGalleryTopBar extends StatelessWidget {
           Row(
             children: [
               IconButton(
-                icon: Icon(isGridView ? Icons.list : Icons.grid_view),
-                onPressed: onViewToggle,
+                icon: const Icon(Icons.refresh),
+                onPressed: widget.refreshGallery,
+              ),
+              IconButton(
+                icon: Icon(widget.isGridView ? Icons.list : Icons.grid_view),
+                onPressed: widget.onViewToggle,
               ),
               IconButton(
                 icon: const Icon(Icons.download),
