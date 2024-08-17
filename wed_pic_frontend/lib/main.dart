@@ -8,7 +8,6 @@ import 'package:wed_pic_frontend/services/IApiClient.dart';
 import 'package:wed_pic_frontend/states/SessionManager.dart';
 
 void main() {
-  String bucketId = '413080d0c8851bf75327ec72a76388d9078f7cfd';
   IApiClient client = ApiClient(ApiSettings.apiUrl);
 
   runApp(
@@ -17,17 +16,13 @@ void main() {
         ChangeNotifierProvider(create: (context) => SessionManager()),
       ],
       child: MaterialApp(
-        title: 'WedPics',
+        title: 'ShareVault',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
         initialRoute: HomePage.route,
         routes: {
           HomePage.route: (context) => HomePage(),
-          SessionPage.route: (context) => SessionPage(
-                client: client,
-                sessionId: bucketId,
-              ),
         },
         onGenerateRoute: (settings) {
           if (settings.name!.startsWith('/session/')) {

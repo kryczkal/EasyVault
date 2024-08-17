@@ -6,6 +6,7 @@ locals {
       folder      = "buckets/"
       roles       = ["roles/storage.admin", "roles/cloudsql.editor"]
       environment = {}
+      mem = "256Mi"
     },
     "session_deletion" = {
       description = "Handles the service end event by deleting the user's bucket"
@@ -13,6 +14,7 @@ locals {
       folder      = "buckets/"
       roles       = ["roles/storage.admin", "roles/cloudsql.editor"]
       environment = {}
+      mem = "256Mi"
     },
     "create_user" = {
       description = "Manages user creation"
@@ -20,6 +22,7 @@ locals {
       folder      = "db/users/"
       roles       = ["roles/cloudsql.editor"]
       environment = {}
+      mem = "256Mi"
     },
     "delete_user" = {
       description = "Manages user deletion"
@@ -27,6 +30,7 @@ locals {
       folder      = "db/users/"
       roles       = ["roles/cloudsql.editor"]
       environment = {}
+      mem = "256Mi"
     },
     "create_order" = {
       description = "Manages order creation"
@@ -34,6 +38,7 @@ locals {
       folder      = "db/orders/"
       roles       = ["roles/cloudsql.editor"]
       environment = {}
+      mem = "256Mi"
     },
     "delete_order" = {
       description = "Manages order deletion"
@@ -41,6 +46,7 @@ locals {
       folder      = "db/orders/"
       roles       = ["roles/cloudsql.editor"]
       environment = {}
+      mem = "256Mi"
     },
     "db_setup" = {
       description = "Sets up the database schema"
@@ -48,6 +54,7 @@ locals {
       folder      = "db/"
       roles       = ["roles/cloudsql.admin"]
       environment = {}
+      mem = "256Mi"
     },
     "auto_sessions" = {
       description = "Activates pending orders that have started"
@@ -58,6 +65,7 @@ locals {
         GCF_SESSION_CREATION_NAME = "session-creation"
         GCF_SESSION_DELETION_NAME = "session-deletion"
       },
+      mem = "256Mi"
     },
     "list_bucket_files" = {
         description = "Fetches files from the user's bucket"
@@ -65,6 +73,7 @@ locals {
         folder      = "buckets/"
         roles       = ["roles/storage.admin"]
         environment = {}
+      mem = "256Mi"
     },
     "upload_chunk" = {
         description = "Uploads a chunk of a file to the user's bucket"
@@ -72,6 +81,7 @@ locals {
         folder      = "buckets/upload_file/"
         roles       = ["roles/storage.admin"]
         environment = {}
+      mem = "256Mi"
     },
     "upload_finalize" = {
         description = "Finalizes the file upload"
@@ -79,6 +89,7 @@ locals {
         folder      = "buckets/upload_file/"
         roles       = ["roles/storage.admin"]
         environment = {}
+      mem = "4Gi"
     },
     "db_state" = {
         description = "Fetches the current state of the database"
@@ -86,6 +97,7 @@ locals {
         folder      = "db/"
         roles       = ["roles/cloudsql.client"]
         environment = {}
+      mem = "256Mi"
     },
   }
 
@@ -178,7 +190,7 @@ resource "google_cloudfunctions2_function" "functions" {
 
   service_config {
     max_instance_count = 1
-    available_memory = "256Mi"
+    available_memory = each.value.mem
     timeout_seconds = 60
     all_traffic_on_latest_revision = true
     service_account_email = google_service_account.function_accounts[each.key].email

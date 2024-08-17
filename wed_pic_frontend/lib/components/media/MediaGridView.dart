@@ -32,8 +32,6 @@ class MediaGridView extends StatelessWidget {
   }
 
   int _getCrossAxisCount(double width) {
-    if (width < 600) return 2;
-    if (width < 900) return 3;
-    return 4;
+    return 1 + (width / 300).floor();
   }
 }

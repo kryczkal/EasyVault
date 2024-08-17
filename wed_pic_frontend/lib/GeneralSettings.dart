@@ -1,11 +1,5 @@
 class GeneralSettings {
-  static final GeneralSettings _instance = GeneralSettings._internal();
-
-  factory GeneralSettings() {
-    return _instance;
-  }
-
-  GeneralSettings._internal();
-
-  final String video_asset_placeholder_path = 'images/video_fallback.png';
+  static const String videoAssetPlaceholderPath = 'images/video_fallback.png';
+  static const String siteUrl =
+      'https://careful-bridge-432408-c6.ew.r.appspot.com/';
 }

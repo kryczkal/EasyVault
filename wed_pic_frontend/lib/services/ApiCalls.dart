@@ -42,16 +42,17 @@ class ApiCalls {
       uploadProgressUpdateHandler((i + 1) / totalChunks);
     }
 
-    await finalizeUpload(sessionId, fileId);
+    await finalizeUpload(sessionId, fileId, media.name);
   }
 
-  Future<void> finalizeUpload(String sessionId, String fileId) async {
+  Future<void> finalizeUpload(
+      String sessionId, String fileId, String fileName) async {
     var finalizeUrl =
         '${ApiSettings.finalizeMediaUploadEndpoint}?session_id=$sessionId';
 
     await ApiSettings.client.postRequest(
       finalizeUrl,
-      {'fileId': fileId},
+      {'fileId': fileId, 'fileName': fileName},
     );
   }
 }

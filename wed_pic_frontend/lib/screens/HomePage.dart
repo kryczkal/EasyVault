@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Text(
-                'WedPics',
+                'ShareVault',
                 style: TextStyle(
                   fontSize:
                       _getTitleFontSize(MediaQuery.of(context).size.width),
