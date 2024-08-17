@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:wed_pic_frontend/models/Media.dart';
 
@@ -22,8 +23,8 @@ class ImageViewerScreen extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: InteractiveViewer(
-            child: Image.network(
-              media.url,
+            child: CachedNetworkImage(
+              imageUrl: media.url,
               fit: BoxFit.contain,
             ),
           ),

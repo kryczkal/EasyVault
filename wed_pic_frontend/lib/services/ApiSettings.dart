@@ -7,7 +7,7 @@ class ApiSettings {
   static const Map<String, String> defaultHeaders = {
     'Content-Type': 'application/json',
   };
-  static const String fetchMediaEndpoint = '/list-bucket-files';
+  static const String fetchMediaEndpoint = '/list-bucket-files-2';
   static const String uploadMediaChunkEndpoint = '/upload-chunk';
   static const String finalizeMediaUploadEndpoint = '/upload-finalize';
 
