@@ -2,22 +2,22 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:image_picker/image_picker.dart';
+import 'package:logger/logger.dart';
+import 'package:wed_pic_frontend/models/Media.dart';
 import 'package:wed_pic_frontend/services/ApiSettings.dart';
 
 class ApiCalls {
   static final ApiCalls _instance = ApiCalls._internal();
-
   factory ApiCalls() {
     return _instance;
   }
-
   ApiCalls._internal();
 
-  int adaptiveChunkSize(int baseChunkSize, double networkSpeedFactor) {
+  static int adaptiveChunkSize(int baseChunkSize, double networkSpeedFactor) {
     return max(256, (baseChunkSize * networkSpeedFactor).toInt());
   }
 
-  Future<void> exponentialBackoffRetry(
+  static Future<void> exponentialBackoffRetry(
       Function uploadChunk, int maxAttempts) async {
     int attempts = 0;
     int delayMs = 100;
@@ -36,7 +36,14 @@ class ApiCalls {
     }
   }
 
-  Future<void> uploadMediaInChunks(String sessionId, XFile media,
+  //  __    __  .______    __        ______        ___       _______
+  // |  |  |  | |   _  \  |  |      /  __  \      /   \     |       \
+  // |  |  |  | |  |_)  | |  |     |  |  |  |    /  ^  \    |  .--.  |
+  // |  |  |  | |   ___/  |  |     |  |  |  |   /  /_\  \   |  |  |  |
+  // |  `--'  | |  |      |  `----.|  `--'  |  /  _____  \  |  '--'  |
+  //  \______/  | _|      |_______| \______/  /__/     \__\ |_______/
+
+  static Future<void> uploadMediaInChunks(String sessionId, XFile media,
       Function(double) uploadProgressUpdateHandler) async {
     var requestUrl = ApiSettings.endpoints.parseUploadMediaChunk(sessionId);
 
@@ -73,7 +80,7 @@ class ApiCalls {
     await finalizeUpload(sessionId, fileId, media.name);
   }
 
-  Future<void> finalizeUpload(
+  static Future<void> finalizeUpload(
       String sessionId, String fileId, String fileName) async {
     var finalizeUrl = ApiSettings.endpoints.parseFinalizeMediaUpload(sessionId);
 
@@ -83,5 +90,34 @@ class ApiCalls {
         {'fileId': fileId, 'fileName': fileName},
       );
     }, 6);
+  }
+
+  //  _______  _______ .___________.  ______  __    __
+  // |   ____||   ____||           | /      ||  |  |  |
+  // |  |__   |  |__   `---|  |----`|  ,----'|  |__|  |
+  // |   __|  |   __|      |  |     |  |     |   __   |
+  // |  |     |  |____     |  |     |  `----.|  |  |  |
+  // |__|     |_______|    |__|      \______||__|  |__|
+
+  static Future<List<Media>> fetchMedia(String sessionId) {
+    var requestUrl = ApiSettings.endpoints.parseFetchMedia(sessionId);
+
+    try {
+      return ApiSettings.client.getRequest(requestUrl).then((data) {
+        try {
+          List<Media> mediaItems = [];
+          for (var item in data) {
+            mediaItems.add(Media.fromJson(item));
+          }
+          return mediaItems;
+        } on Exception catch (e) {
+          Logger().e('Failed to load media items: $e');
+          return [];
+        }
+      });
+    } on Exception catch (e) {
+      Logger().e('Failed to load media items: $e');
+      return Future.value([]);
+    }
   }
 }

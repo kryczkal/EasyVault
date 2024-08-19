@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wed_pic_frontend/components/media/gallery/GridItem.dart';
 import 'package:wed_pic_frontend/models/Media.dart';
+import 'package:wed_pic_frontend/utils/Responsiveness.dart';
 
 class MediaGridView extends StatelessWidget {
   final List<Media> mediaItems;
@@ -11,7 +12,8 @@ class MediaGridView extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        int crossAxisCount = _getCrossAxisCount(constraints.maxWidth);
+        int crossAxisCount =
+            Responsiveness.getCrossAxisCount(constraints.maxWidth, 300);
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: GridView.builder(
@@ -29,10 +31,5 @@ class MediaGridView extends StatelessWidget {
         );
       },
     );
-  }
-
-  // TODO: Move this to a utility class
-  int _getCrossAxisCount(double width) {
-    return 1 + (width / 300).floor();
   }
 }
