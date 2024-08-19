@@ -36,8 +36,7 @@ class _SessionPageState extends State<SessionPage> {
 
   // TODO: Should be moved to a separate class
   void fetchMedia() {
-    var requestUrl =
-        '${ApiSettings.fetchMediaEndpoint}?bucket_id=${widget.sessionId}';
+    var requestUrl = ApiSettings.endpoints.parseFetchMedia(widget.sessionId);
 
     try {
       mediaItems = widget.client.getRequest(requestUrl).then((data) {

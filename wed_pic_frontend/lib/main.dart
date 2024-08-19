@@ -8,8 +8,6 @@ import 'package:wed_pic_frontend/services/IApiClient.dart';
 import 'package:wed_pic_frontend/states/SessionManager.dart';
 
 void main() {
-  IApiClient client = ApiClient(ApiSettings.apiUrl);
-
   runApp(
     MultiProvider(
       providers: [
@@ -30,7 +28,7 @@ void main() {
             return MaterialPageRoute(
                 builder: (context) => SessionPage(
                       sessionId: sessionId,
-                      client: client,
+                      client: ApiSettings.client,
                     ));
           }
           return null;

@@ -38,8 +38,7 @@ class ApiCalls {
 
   Future<void> uploadMediaInChunks(String sessionId, XFile media,
       Function(double) uploadProgressUpdateHandler) async {
-    var requestUrl =
-        '${ApiSettings.uploadMediaChunkEndpoint}?session_id=$sessionId';
+    var requestUrl = ApiSettings.endpoints.parseUploadMediaChunk(sessionId);
 
     final bytes = await media.readAsBytes();
     int baseChunkSizeB = 1024 * 1024; // 1MB
@@ -76,8 +75,7 @@ class ApiCalls {
 
   Future<void> finalizeUpload(
       String sessionId, String fileId, String fileName) async {
-    var finalizeUrl =
-        '${ApiSettings.finalizeMediaUploadEndpoint}?session_id=$sessionId';
+    var finalizeUrl = ApiSettings.endpoints.parseFinalizeMediaUpload(sessionId);
 
     await exponentialBackoffRetry(() async {
       await ApiSettings.client.postRequest(

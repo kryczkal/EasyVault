@@ -35,7 +35,8 @@ class ApiClient implements IApiClient {
 
   @override
   Future<dynamic> postRequest(String endpoint, Map<String, dynamic> body,
-      {Map<String, String>? headers = ApiSettings.defaultHeaders}) async {
+      {Map<String, String>? headers}) async {
+    headers ??= ApiSettings.requests.defaultHeaders;
     logger.i('POST request to ${Uri.parse('$baseUrl$endpoint')}');
     try {
       final response = await client.post(

@@ -7,19 +7,19 @@ from utils import validate_image, validate_video
 @functions_framework.http
 def list_bucket_files(request):
     try:
-        bucket_id = request.args.get('bucket_id')
+        session_id = request.args.get('session_id')
 
-        if not bucket_id:
+        if not session_id:
             request_json = request.get_json(silent=True)
-            if request_json and 'bucket_id' in request_json:
-                bucket_id = request_json['bucket_id']
+            if request_json and 'session_id' in request_json:
+                session_id = request_json['session_id']
 
-        if not bucket_id:
-            return abort(400, description="Invalid request: 'bucket_id' is required either as a query parameter or in the JSON body.")
+        if not session_id:
+            return abort(400, description="Invalid request: 'session_id' is required either as a query parameter or in the JSON body.")
         
         storage_client = storage.Client()
-        bucket = storage_client.get_bucket(bucket_id)
-        print(f"Bucket {bucket_id} found")
+        bucket = storage_client.get_bucket(session_id)
+        print(f"Bucket {session_id} found")
         print(f"Number of files in bucket: {len(list(bucket.list_blobs()))}")
 
         files = []
