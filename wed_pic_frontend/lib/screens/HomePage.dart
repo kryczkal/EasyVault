@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:wed_pic_frontend/services/ApiClient.dart';
-import 'package:wed_pic_frontend/services/ApiSettings.dart';
-import 'package:wed_pic_frontend/services/IApiClient.dart';
 
 class HomePage extends StatefulWidget {
   static const String route = '/';
-
-  IApiClient client = ApiClient(ApiSettings.apiUrl);
 
   HomePage({super.key});
 

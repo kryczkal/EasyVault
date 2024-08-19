@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:wed_pic_frontend/GeneralSettings.dart';
+import 'package:wed_pic_frontend/services/ApiSettings.dart';
 import 'package:wed_pic_frontend/states/SessionManager.dart';
 
 class QrCodeButton extends StatefulWidget {
@@ -15,9 +16,7 @@ class _QrCodeButtonState extends State<QrCodeButton> {
   String _getQrCode() {
     String session_id =
         Provider.of<SessionManager>(context, listen: false).sessionId!;
-    // TODO: Move this to settings
-    String url = GeneralSettings.siteUrl + '#/session/' + session_id;
-    return url;
+    return ApiSettings.urls.parseQrCode(session_id);
   }
 
   // TODO: Move this to a separate class
