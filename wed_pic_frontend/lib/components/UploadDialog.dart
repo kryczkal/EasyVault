@@ -17,6 +17,9 @@ class MediaUploadDialog extends StatefulWidget {
   _MediaUploadDialogState createState() => _MediaUploadDialogState();
 }
 
+// TODO: Each file grid item should be moved to a separate component
+// TODO: The upload logic should be moved to a separate class and the
+// UI should be separated from the logic
 class _MediaUploadDialogState extends State<MediaUploadDialog>
     with TickerProviderStateMixin {
   Map<String, bool?> _uploadStatus = {};
@@ -33,7 +36,6 @@ class _MediaUploadDialogState extends State<MediaUploadDialog>
 
   @override
   void dispose() {
-    // Dispose all animation controllers when the widget is disposed
     for (var controller in _animationControllers.values) {
       controller.dispose();
     }
@@ -49,7 +51,6 @@ class _MediaUploadDialogState extends State<MediaUploadDialog>
         for (var media in widget.selectedMedias) media.name: 0.0
       };
 
-      // Initialize animation controllers and animations for each media
       _animationControllers = {
         for (var media in widget.selectedMedias)
           media.name: AnimationController(

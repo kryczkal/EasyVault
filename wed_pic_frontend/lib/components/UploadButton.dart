@@ -6,7 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
-import 'package:wed_pic_frontend/components/media/MediaUploadDialog.dart';
+import 'package:wed_pic_frontend/components/UploadDialog.dart';
 import 'package:wed_pic_frontend/services/ApiCalls.dart';
 import 'package:provider/provider.dart';
 import 'package:wed_pic_frontend/states/SessionManager.dart';
@@ -18,6 +18,7 @@ class MediaUploadButton extends StatefulWidget {
   State<MediaUploadButton> createState() => _MediaUploadButtonState();
 }
 
+// TODO: File picking logic should be moved to a separate class
 class _MediaUploadButtonState extends State<MediaUploadButton> {
   var logger = Logger();
 
