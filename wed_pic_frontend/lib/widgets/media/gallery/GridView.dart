@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wed_pic_frontend/components/media/gallery/GridItem.dart';
+import 'package:wed_pic_frontend/widgets/media/gallery/GridItem.dart';
 import 'package:wed_pic_frontend/models/Media.dart';
 import 'package:wed_pic_frontend/utils/Responsiveness.dart';
 

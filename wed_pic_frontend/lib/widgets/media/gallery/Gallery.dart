@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:wed_pic_frontend/GeneralSettings.dart';
-import 'package:wed_pic_frontend/components/media/gallery/GalleryTopBar.dart';
-import 'package:wed_pic_frontend/components/media/gallery/GridView.dart';
-import 'package:wed_pic_frontend/components/media/gallery/ListView.dart';
-import 'package:wed_pic_frontend/components/UploadButton.dart';
-import 'package:wed_pic_frontend/components/QrCodeButton.dart';
+import 'package:wed_pic_frontend/widgets/media/gallery/GalleryTopBar.dart';
+import 'package:wed_pic_frontend/widgets/media/gallery/GridView.dart';
+import 'package:wed_pic_frontend/widgets/media/gallery/ListView.dart';
+import 'package:wed_pic_frontend/widgets/UploadButton.dart';
+import 'package:wed_pic_frontend/widgets/QrCodeButton.dart';
 import 'package:wed_pic_frontend/models/Media.dart';
 import 'package:wed_pic_frontend/states/SessionManager.dart';
 import 'package:provider/provider.dart';

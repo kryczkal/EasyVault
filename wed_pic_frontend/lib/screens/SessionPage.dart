@@ -4,7 +4,7 @@ import 'package:wed_pic_frontend/services/ApiCalls.dart';
 import 'package:wed_pic_frontend/states/SessionManager.dart';
 import 'package:logger/logger.dart';
 import 'package:wed_pic_frontend/models/Media.dart';
-import 'package:wed_pic_frontend/components/media/gallery/Gallery.dart';
+import 'package:wed_pic_frontend/widgets/media/gallery/Gallery.dart';
 import 'package:wed_pic_frontend/services/ApiSettings.dart';
 import 'package:wed_pic_frontend/services/IApiClient.dart';
 
