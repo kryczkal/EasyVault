@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wed_pic_frontend/services/ApiCalls.dart';
-import 'package:wed_pic_frontend/states/SessionManager.dart';
-import 'package:logger/logger.dart';
-import 'package:wed_pic_frontend/models/Media.dart';
-import 'package:wed_pic_frontend/widgets/media/gallery/Gallery.dart';
-import 'package:wed_pic_frontend/services/ApiSettings.dart';
-import 'package:wed_pic_frontend/services/IApiClient.dart';
+import 'package:wed_pic_frontend/services/api_calls.dart';
+import 'package:wed_pic_frontend/states/session_manager.dart';
+import 'package:wed_pic_frontend/models/media.dart';
+import 'package:wed_pic_frontend/widgets/media/gallery/gallery.dart';
+import 'package:wed_pic_frontend/services/api_client_interface.dart';
 
 class SessionPage extends StatefulWidget {
   static const String route = '/session/:sessionId';

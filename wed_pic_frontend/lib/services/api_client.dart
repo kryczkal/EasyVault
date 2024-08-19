@@ -1,9 +1,9 @@
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
-import 'package:wed_pic_frontend/services/ApiSettings.dart';
+import 'package:wed_pic_frontend/services/api_settings.dart';
 import 'dart:convert';
 
-import 'IApiClient.dart';
+import 'api_client_interface.dart';
 
 class ApiClient implements IApiClient {
   final String baseUrl;
@@ -54,6 +54,7 @@ class ApiClient implements IApiClient {
     }
   }
 
+  @override
   Future<dynamic> postBinaryRequest(String endpoint, List<int> bodyBytes,
       {Map<String, String>? headers}) async {
     logger.i('POST binary request to ${Uri.parse('$baseUrl$endpoint')}');

@@ -2,26 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
-import 'package:wed_pic_frontend/services/ApiCalls.dart';
-import 'package:wed_pic_frontend/states/SessionManager.dart';
-import 'package:wed_pic_frontend/utils/Responsiveness.dart';
+import 'package:wed_pic_frontend/services/api_calls.dart';
+import 'package:wed_pic_frontend/states/session_manager.dart';
+import 'package:wed_pic_frontend/utils/responsiveness.dart';
 
 class MediaUploadDialog extends StatefulWidget {
   final List<XFile> selectedMedias;
 
   const MediaUploadDialog({
-    Key? key,
+    super.key,
     required this.selectedMedias,
-  }) : super(key: key);
+  });
 
   @override
-  _MediaUploadDialogState createState() => _MediaUploadDialogState();
+  MediaUploadDialogState createState() => MediaUploadDialogState();
 }
 
 // TODO: Each file grid item should be moved to a separate component
 // TODO: The upload logic should be moved to a separate class and the
 // UI should be separated from the logic
-class _MediaUploadDialogState extends State<MediaUploadDialog>
+class MediaUploadDialogState extends State<MediaUploadDialog>
     with TickerProviderStateMixin {
   Map<String, bool?> _uploadStatus = {};
   Map<String, double> _uploadProgress = {};
@@ -56,7 +56,7 @@ class _MediaUploadDialogState extends State<MediaUploadDialog>
         for (var media in widget.selectedMedias)
           media.name: AnimationController(
             vsync: this,
-            duration: Duration(milliseconds: 500),
+            duration: const Duration(milliseconds: 500),
           )
       };
 
@@ -76,7 +76,6 @@ class _MediaUploadDialogState extends State<MediaUploadDialog>
 
   void _updateProgress(String mediaName, double newProgress) {
     final controller = _animationControllers[mediaName]!;
-    final animation = _animations[mediaName]!;
 
     controller.reset();
 
@@ -137,7 +136,7 @@ class _MediaUploadDialogState extends State<MediaUploadDialog>
           color: Colors.black87,
         ),
       ),
-      content: Container(
+      content: SizedBox(
         width: double.maxFinite,
         child: GridView.builder(
           shrinkWrap: true,
@@ -158,8 +157,8 @@ class _MediaUploadDialogState extends State<MediaUploadDialog>
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      const BoxShadow(
+                    boxShadow: const [
+                      BoxShadow(
                         color: Colors.black12,
                         blurRadius: 8,
                         offset: Offset(0, 4),

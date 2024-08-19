@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qr_flutter/qr_flutter.dart';
-import 'package:wed_pic_frontend/GeneralSettings.dart';
-import 'package:wed_pic_frontend/services/ApiSettings.dart';
-import 'package:wed_pic_frontend/states/SessionManager.dart';
-import 'package:wed_pic_frontend/widgets/dialogs/QrDialog.dart';
+import 'package:wed_pic_frontend/services/api_settings.dart';
+import 'package:wed_pic_frontend/states/session_manager.dart';
+import 'package:wed_pic_frontend/widgets/dialogs/qr_dialog.dart';
 
 class QrCodeButton extends StatefulWidget {
   const QrCodeButton({super.key});
@@ -15,9 +13,9 @@ class QrCodeButton extends StatefulWidget {
 
 class _QrCodeButtonState extends State<QrCodeButton> {
   String _getQrCode() {
-    String session_id =
+    String sessionId =
         Provider.of<SessionManager>(context, listen: false).sessionId!;
-    return ApiSettings.urls.parseQrCode(session_id);
+    return ApiSettings.urls.parseQrCode(sessionId);
   }
 
   void _showQrCodeDialog(BuildContext context) {

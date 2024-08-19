@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:qr_flutter/qr_flutter.dart';
-import 'package:wed_pic_frontend/GeneralSettings.dart';
-import 'package:wed_pic_frontend/states/SessionManager.dart';
-import 'package:provider/provider.dart';
+import 'package:wed_pic_frontend/utils/common.dart';
 
 class MediaGalleryTopBar extends StatefulWidget {
   final bool isGridView;
@@ -48,7 +45,7 @@ class _MediaGalleryTopBarState extends State<MediaGalleryTopBar> {
                 icon: const Icon(Icons.download),
                 onPressed: () {
                   // TODO: Implement download functionality
-                  print('Download button pressed');
+                  logger.d('Download button pressed');
                 },
               ),
             ],

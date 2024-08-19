@@ -3,8 +3,8 @@ import 'dart:typed_data';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
-import 'package:wed_pic_frontend/models/Media.dart';
-import 'package:wed_pic_frontend/services/ApiSettings.dart';
+import 'package:wed_pic_frontend/models/media.dart';
+import 'package:wed_pic_frontend/services/api_settings.dart';
 
 class ApiCalls {
   static final ApiCalls _instance = ApiCalls._internal();

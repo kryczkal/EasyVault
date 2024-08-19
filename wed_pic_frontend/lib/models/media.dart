@@ -1,7 +1,7 @@
 /// A class that represents a media object in the app and database.
 class Media {
   final String url;
-  final String type; // "image" or "video"
+  final String type; // "image" or "video" or "other"
   final String name;
   final String size;
 

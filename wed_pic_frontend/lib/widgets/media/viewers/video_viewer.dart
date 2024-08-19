@@ -1,18 +1,18 @@
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
-import 'package:wed_pic_frontend/models/Media.dart';
+import 'package:wed_pic_frontend/models/media.dart';
 
-class VideoViewerScreen extends StatefulWidget {
+class VideoViewer extends StatefulWidget {
   final Media media;
 
-  const VideoViewerScreen({super.key, required this.media});
+  const VideoViewer({super.key, required this.media});
 
   @override
-  _VideoViewerScreenState createState() => _VideoViewerScreenState();
+  VideoViewerState createState() => VideoViewerState();
 }
 
-class _VideoViewerScreenState extends State<VideoViewerScreen> {
+class VideoViewerState extends State<VideoViewer> {
   late VideoPlayerController _videoPlayerController;
   ChewieController? _chewieController;
 
@@ -41,24 +41,13 @@ class _VideoViewerScreenState extends State<VideoViewerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.media.name),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
-      body: Center(
-        child: _chewieController != null &&
-                _chewieController!.videoPlayerController.value.isInitialized
-            ? Chewie(
-                controller: _chewieController!,
-              )
-            : const CircularProgressIndicator(),
-      ),
+    return Center(
+      child: _chewieController != null &&
+              _chewieController!.videoPlayerController.value.isInitialized
+          ? Chewie(
+              controller: _chewieController!,
+            )
+          : const CircularProgressIndicator(),
     );
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:wed_pic_frontend/widgets/media/gallery/GridItem.dart';
-import 'package:wed_pic_frontend/models/Media.dart';
-import 'package:wed_pic_frontend/utils/Responsiveness.dart';
+import 'package:wed_pic_frontend/widgets/media/gallery/grid_item.dart';
+import 'package:wed_pic_frontend/models/media.dart';
+import 'package:wed_pic_frontend/utils/responsiveness.dart';
 
 class MediaGridView extends StatelessWidget {
   final List<Media> mediaItems;
@@ -25,7 +25,7 @@ class MediaGridView extends StatelessWidget {
             ),
             itemCount: mediaItems.length,
             itemBuilder: (context, index) {
-              return MediaItem(media: mediaItems[index]);
+              return GridItem(media: mediaItems[index]);
             },
           ),
         );

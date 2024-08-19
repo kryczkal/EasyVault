@@ -48,6 +48,8 @@ dependencies:
   video_thumbnail_imageview: ^0.0.6
   chewie: ^1.8.3
   file_picker: ^8.1.2
+  url_launcher: ^6.3.0
+  provider: any
 dev_dependencies:
   flutter_test:
     sdk: flutter
