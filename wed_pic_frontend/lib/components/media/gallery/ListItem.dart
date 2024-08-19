@@ -3,7 +3,7 @@ import 'package:wed_pic_frontend/components/media/viewers/ImageViewer.dart';
 import 'package:wed_pic_frontend/components/media/viewers/VideoViewer.dart';
 import 'package:wed_pic_frontend/models/Media.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:wed_pic_frontend/utils/FormatBytes.dart';
+import 'package:wed_pic_frontend/utils/Common.dart';
 
 class MediaListItem extends StatelessWidget {
   final Media media;
@@ -22,7 +22,7 @@ class MediaListItem extends StatelessWidget {
             )
           : const Icon(Icons.play_circle_outline, size: 50),
       title: Text(media.name),
-      subtitle: Text(formatBytes(media.size)),
+      subtitle: Text(Common.formatBytes(media.size)),
       onTap: () {
         // TODO: Media Viewer should be a separate universal component
         // That can handle both image and video, and miscellaneous media types

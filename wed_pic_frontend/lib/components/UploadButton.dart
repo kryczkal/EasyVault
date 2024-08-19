@@ -10,6 +10,7 @@ import 'package:wed_pic_frontend/components/UploadDialog.dart';
 import 'package:wed_pic_frontend/services/ApiCalls.dart';
 import 'package:provider/provider.dart';
 import 'package:wed_pic_frontend/states/SessionManager.dart';
+import 'package:wed_pic_frontend/utils/Common.dart';
 
 class MediaUploadButton extends StatefulWidget {
   const MediaUploadButton({super.key});
@@ -18,22 +19,11 @@ class MediaUploadButton extends StatefulWidget {
   State<MediaUploadButton> createState() => _MediaUploadButtonState();
 }
 
-// TODO: File picking logic should be moved to a separate class
 class _MediaUploadButtonState extends State<MediaUploadButton> {
-  var logger = Logger();
-
   Future<void> pickFiles() async {
-    logger.i('Picking files');
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      allowMultiple: true,
-    );
-    if (result != null) {
-      List<XFile> medias = result.xFiles;
-      logger.i('Files picked: ${medias.map((e) => e.name).toList()}');
-
-      _showMediaPreview(medias);
-    } else {
-      logger.w('No valid files selected or FilePickerResult is null');
+    List<XFile>? selectedMedias = await Common.pickFiles();
+    if (selectedMedias.isNotEmpty) {
+      _showMediaPreview(selectedMedias);
     }
   }
 
