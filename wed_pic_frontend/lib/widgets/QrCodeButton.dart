@@ -4,6 +4,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:wed_pic_frontend/GeneralSettings.dart';
 import 'package:wed_pic_frontend/services/ApiSettings.dart';
 import 'package:wed_pic_frontend/states/SessionManager.dart';
+import 'package:wed_pic_frontend/widgets/dialogs/QrDialog.dart';
 
 class QrCodeButton extends StatefulWidget {
   const QrCodeButton({super.key});
@@ -19,36 +20,12 @@ class _QrCodeButtonState extends State<QrCodeButton> {
     return ApiSettings.urls.parseQrCode(session_id);
   }
 
-  // TODO: Move this to a separate class
   void _showQrCodeDialog(BuildContext context) {
-    String qrCodeUrl = _getQrCode();
     showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Scan this QR Code', textAlign: TextAlign.center),
-          content: SizedBox(
-            width: 200.0,
-            height: 200.0,
-            child: Center(
-              child: QrImageView(
-                data: qrCodeUrl,
-                version: QrVersions.auto,
-                size: 200.0,
-              ),
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Close'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
+        context: context,
+        builder: (context) {
+          return QrDialog(qrData: _getQrCode());
+        });
   }
 
   @override

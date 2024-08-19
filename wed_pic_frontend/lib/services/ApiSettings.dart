@@ -24,7 +24,7 @@ class Urls {
   const Urls();
   final String apiUrl =
       'https://europe-west1-careful-bridge-432408-c6.cloudfunctions.net';
-  final String siteUrl = 'https://careful-bridge-432408-c6.ew.r.appspot.com/';
+  final String siteUrl = 'https://careful-bridge-432408-c6.ew.r.appspot.com';
 
   String parseQrCode(String sessionId) {
     return '$siteUrl/#/session/$sessionId';
