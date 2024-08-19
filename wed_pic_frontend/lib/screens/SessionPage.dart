@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wed_pic_frontend/services/ApiCalls.dart';
 import 'package:wed_pic_frontend/states/SessionManager.dart';
 import 'package:logger/logger.dart';
 import 'package:wed_pic_frontend/models/Media.dart';
@@ -30,33 +31,12 @@ class _SessionPageState extends State<SessionPage> {
       _sessionManager = Provider.of<SessionManager>(context, listen: false);
       _sessionManager?.setSessionId(widget.sessionId);
     });
-
-    fetchMedia();
+    mediaItems = ApiCalls.fetchMedia(widget.sessionId);
   }
 
-  // TODO: Should be moved to a separate class
   void fetchMedia() {
-    var requestUrl = ApiSettings.endpoints.parseFetchMedia(widget.sessionId);
-
-    try {
-      mediaItems = widget.client.getRequest(requestUrl).then((data) {
-        try {
-          List<Media> mediaItems = [];
-          for (var item in data) {
-            mediaItems.add(Media.fromJson(item));
-          }
-          return mediaItems;
-        } on Exception catch (e) {
-          Logger().e('Failed to load media items: $e');
-          return [];
-        }
-      });
-    } on Exception catch (e) {
-      Logger().e('Failed to load media items: $e');
-      mediaItems = Future.value([]);
-    }
     setState(() {
-      mediaItems = mediaItems;
+      mediaItems = ApiCalls.fetchMedia(widget.sessionId);
     });
   }
 

@@ -4,6 +4,7 @@ import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:wed_pic_frontend/services/ApiCalls.dart';
 import 'package:wed_pic_frontend/states/SessionManager.dart';
+import 'package:wed_pic_frontend/utils/Responsiveness.dart';
 
 class MediaUploadDialog extends StatefulWidget {
   final List<XFile> selectedMedias;
@@ -104,7 +105,7 @@ class _MediaUploadDialogState extends State<MediaUploadDialog>
 
     for (var media in widget.selectedMedias) {
       try {
-        await ApiCalls().uploadMediaInChunks(
+        await ApiCalls.uploadMediaInChunks(
           sessionId,
           media,
           (double progress) {
@@ -125,10 +126,6 @@ class _MediaUploadDialogState extends State<MediaUploadDialog>
     }
   }
 
-  int _getCrossAxisCount(double width) {
-    return 1 + (width ~/ 200);
-  }
-
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -145,8 +142,8 @@ class _MediaUploadDialogState extends State<MediaUploadDialog>
         child: GridView.builder(
           shrinkWrap: true,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount:
-                _getCrossAxisCount(MediaQuery.of(context).size.width),
+            crossAxisCount: Responsiveness.getCrossAxisCount(
+                MediaQuery.of(context).size.width, 200),
             crossAxisSpacing: 8.0,
             mainAxisSpacing: 8.0,
           ),
