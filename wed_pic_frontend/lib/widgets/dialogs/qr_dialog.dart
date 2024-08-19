@@ -3,7 +3,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 
 class QrDialog extends StatelessWidget {
   final String qrData;
-  const QrDialog({required this.qrData});
+  const QrDialog({super.key, required this.qrData});
 
   @override
   Widget build(BuildContext context) {

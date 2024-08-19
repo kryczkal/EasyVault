@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 class HomePage extends StatefulWidget {
   static const String route = '/';
 
-  HomePage({super.key});
+  const HomePage({super.key});
 
   @override
-  _HomePageState createState() => _HomePageState();
+  HomePageState createState() => HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class HomePageState extends State<HomePage> {
   final TextEditingController _controller = TextEditingController();
 
   void _navigateToSession() {

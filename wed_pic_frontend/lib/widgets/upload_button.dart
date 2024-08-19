@@ -1,16 +1,7 @@
-import 'dart:convert';
-import 'dart:io';
-import 'dart:math';
-import 'dart:typed_data';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:logger/logger.dart';
-import 'package:wed_pic_frontend/widgets/UploadDialog.dart';
-import 'package:wed_pic_frontend/services/ApiCalls.dart';
-import 'package:provider/provider.dart';
-import 'package:wed_pic_frontend/states/SessionManager.dart';
-import 'package:wed_pic_frontend/utils/Common.dart';
+import 'package:wed_pic_frontend/widgets/dialogs/upload_dialog.dart';
+import 'package:wed_pic_frontend/utils/common.dart';
 
 class MediaUploadButton extends StatefulWidget {
   const MediaUploadButton({super.key});

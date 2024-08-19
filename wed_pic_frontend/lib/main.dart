@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wed_pic_frontend/screens/HomePage.dart';
-import 'package:wed_pic_frontend/screens/SessionPage.dart';
-import 'package:wed_pic_frontend/services/ApiSettings.dart';
-import 'package:wed_pic_frontend/services/ApiClient.dart';
-import 'package:wed_pic_frontend/services/IApiClient.dart';
-import 'package:wed_pic_frontend/states/SessionManager.dart';
+import 'package:wed_pic_frontend/screens/home_page.dart';
+import 'package:wed_pic_frontend/screens/session_page.dart';
+import 'package:wed_pic_frontend/services/api_settings.dart';
+import 'package:wed_pic_frontend/states/session_manager.dart';
 
 void main() {
   runApp(
@@ -20,7 +18,7 @@ void main() {
         ),
         initialRoute: HomePage.route,
         routes: {
-          HomePage.route: (context) => HomePage(),
+          HomePage.route: (context) => const HomePage(),
         },
         onGenerateRoute: (settings) {
           if (settings.name!.startsWith('/session/')) {

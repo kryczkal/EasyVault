@@ -1,5 +1,5 @@
-import 'package:wed_pic_frontend/services/ApiClient.dart';
-import 'package:wed_pic_frontend/services/IApiClient.dart';
+import 'package:wed_pic_frontend/services/api_client.dart';
+import 'package:wed_pic_frontend/services/api_client_interface.dart';
 
 class Endpoints {
   const Endpoints();

@@ -1,30 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:qr_flutter/qr_flutter.dart';
-import 'package:wed_pic_frontend/GeneralSettings.dart';
-import 'package:wed_pic_frontend/widgets/media/gallery/GalleryTopBar.dart';
-import 'package:wed_pic_frontend/widgets/media/gallery/GridView.dart';
-import 'package:wed_pic_frontend/widgets/media/gallery/ListView.dart';
-import 'package:wed_pic_frontend/widgets/UploadButton.dart';
-import 'package:wed_pic_frontend/widgets/QrCodeButton.dart';
-import 'package:wed_pic_frontend/models/Media.dart';
-import 'package:wed_pic_frontend/states/SessionManager.dart';
-import 'package:provider/provider.dart';
+import 'package:wed_pic_frontend/widgets/media/gallery/gallery_top_bar.dart';
+import 'package:wed_pic_frontend/widgets/media/gallery/grid_view.dart';
+import 'package:wed_pic_frontend/widgets/media/gallery/list_view.dart';
+import 'package:wed_pic_frontend/widgets/upload_button.dart';
+import 'package:wed_pic_frontend/widgets/qr_code_button.dart';
+import 'package:wed_pic_frontend/models/media.dart';
 
 class MediaGallery extends StatefulWidget {
   final Future<List<Media>> mediaItems;
   final VoidCallback refreshGallery;
 
   const MediaGallery(
-      {super.key,
-      required this.mediaItems,
-      required void Function() refreshGallery})
-      : refreshGallery = refreshGallery;
+      {super.key, required this.mediaItems, required this.refreshGallery});
 
   @override
-  _MediaGalleryState createState() => _MediaGalleryState();
+  MediaGalleryState createState() => MediaGalleryState();
 }
 
-class _MediaGalleryState extends State<MediaGallery> {
+class MediaGalleryState extends State<MediaGallery> {
   bool _isGridView = true;
 
   @override
@@ -61,22 +54,22 @@ class _MediaGalleryState extends State<MediaGallery> {
           ],
         ),
         // TODO: Move these buttons to a separate class
-        Positioned(
+        const Positioned(
+          bottom: 16,
+          right: 16,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: EdgeInsets.all(8.0),
                 child: QrCodeButton(),
               ),
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: EdgeInsets.all(8.0),
                 child: MediaUploadButton(),
               ),
             ],
           ),
-          bottom: 16,
-          right: 16,
         ),
       ],
     );
