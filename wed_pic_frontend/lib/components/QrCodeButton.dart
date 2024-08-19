@@ -15,10 +15,12 @@ class _QrCodeButtonState extends State<QrCodeButton> {
   String _getQrCode() {
     String session_id =
         Provider.of<SessionManager>(context, listen: false).sessionId!;
+    // TODO: Move this to settings
     String url = GeneralSettings.siteUrl + '#/session/' + session_id;
     return url;
   }
 
+  // TODO: Move this to a separate class
   void _showQrCodeDialog(BuildContext context) {
     String qrCodeUrl = _getQrCode();
     showDialog(

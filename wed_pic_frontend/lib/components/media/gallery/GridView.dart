@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wed_pic_frontend/components/media/MediaItem.dart';
+import 'package:wed_pic_frontend/components/media/gallery/GridItem.dart';
 import 'package:wed_pic_frontend/models/Media.dart';
 
 class MediaGridView extends StatelessWidget {
@@ -31,6 +31,7 @@ class MediaGridView extends StatelessWidget {
     );
   }
 
+  // TODO: Move this to a utility class
   int _getCrossAxisCount(double width) {
     return 1 + (width / 300).floor();
   }

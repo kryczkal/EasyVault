@@ -1,9 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:wed_pic_frontend/components/media/ImageViewerScreen.dart';
+import 'package:wed_pic_frontend/components/media/viewers/ImageViewer.dart';
 import 'package:wed_pic_frontend/components/media/VideoThumbnail.dart';
-import 'package:wed_pic_frontend/components/media/VideoViewerScreen.dart';
+import 'package:wed_pic_frontend/components/media/viewers/VideoViewer.dart';
 import 'package:wed_pic_frontend/models/Media.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:wed_pic_frontend/utils/FormatBytes.dart';
@@ -13,6 +13,7 @@ class MediaItem extends StatelessWidget {
 
   const MediaItem({super.key, required this.media});
 
+  // TODO: This should be broken down into smaller compontents
   @override
   Widget build(BuildContext context) {
     return ClipRRect(

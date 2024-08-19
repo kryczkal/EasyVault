@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:wed_pic_frontend/states/SessionManager.dart';
 import 'package:logger/logger.dart';
 import 'package:wed_pic_frontend/models/Media.dart';
-import 'package:wed_pic_frontend/components/media/MediaGallery.dart';
+import 'package:wed_pic_frontend/components/media/gallery/Gallery.dart';
 import 'package:wed_pic_frontend/services/ApiSettings.dart';
 import 'package:wed_pic_frontend/services/IApiClient.dart';
 
@@ -34,6 +34,7 @@ class _SessionPageState extends State<SessionPage> {
     fetchMedia();
   }
 
+  // TODO: Should be moved to a separate class
   void fetchMedia() {
     var requestUrl =
         '${ApiSettings.fetchMediaEndpoint}?bucket_id=${widget.sessionId}';

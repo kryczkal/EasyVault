@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wed_pic_frontend/components/media/MediaListItem.dart';
+import 'package:wed_pic_frontend/components/media/gallery/ListItem.dart';
 import 'package:wed_pic_frontend/models/Media.dart';
 
 class MediaListView extends StatelessWidget {

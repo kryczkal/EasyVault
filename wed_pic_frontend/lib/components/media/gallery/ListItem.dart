@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wed_pic_frontend/components/media/ImageViewerScreen.dart';
-import 'package:wed_pic_frontend/components/media/VideoViewerScreen.dart';
+import 'package:wed_pic_frontend/components/media/viewers/ImageViewer.dart';
+import 'package:wed_pic_frontend/components/media/viewers/VideoViewer.dart';
 import 'package:wed_pic_frontend/models/Media.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:wed_pic_frontend/utils/FormatBytes.dart';
@@ -24,6 +24,8 @@ class MediaListItem extends StatelessWidget {
       title: Text(media.name),
       subtitle: Text(formatBytes(media.size)),
       onTap: () {
+        // TODO: Media Viewer should be a separate universal component
+        // That can handle both image and video, and miscellaneous media types
         if (media.type == 'image') {
           Navigator.push(
             context,

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:wed_pic_frontend/GeneralSettings.dart';
-import 'package:wed_pic_frontend/components/media/MediaGalleryTopBar.dart';
-import 'package:wed_pic_frontend/components/media/MediaGridView.dart';
-import 'package:wed_pic_frontend/components/media/MediaListView.dart';
-import 'package:wed_pic_frontend/components/media/MediaUploadButton.dart';
-import 'package:wed_pic_frontend/components/media/QrCodeButton.dart';
+import 'package:wed_pic_frontend/components/media/gallery/GalleryTopBar.dart';
+import 'package:wed_pic_frontend/components/media/gallery/GridView.dart';
+import 'package:wed_pic_frontend/components/media/gallery/ListView.dart';
+import 'package:wed_pic_frontend/components/UploadButton.dart';
+import 'package:wed_pic_frontend/components/QrCodeButton.dart';
 import 'package:wed_pic_frontend/models/Media.dart';
 import 'package:wed_pic_frontend/states/SessionManager.dart';
 import 'package:provider/provider.dart';
@@ -45,6 +45,7 @@ class _MediaGalleryState extends State<MediaGallery> {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
+                    // TODO: Create a custom error widget
                     return Center(child: Text('Error: ${snapshot.error}'));
                   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                     return const Center(child: Text('No media found.'));
@@ -59,6 +60,7 @@ class _MediaGalleryState extends State<MediaGallery> {
             ),
           ],
         ),
+        // TODO: Move these buttons to a separate class
         Positioned(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
