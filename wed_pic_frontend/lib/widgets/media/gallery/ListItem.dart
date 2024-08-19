@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wed_pic_frontend/components/media/viewers/ImageViewer.dart';
-import 'package:wed_pic_frontend/components/media/viewers/VideoViewer.dart';
+import 'package:wed_pic_frontend/widgets/media/viewers/ImageViewer.dart';
+import 'package:wed_pic_frontend/widgets/media/viewers/VideoViewer.dart';
 import 'package:wed_pic_frontend/models/Media.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:wed_pic_frontend/utils/Common.dart';
