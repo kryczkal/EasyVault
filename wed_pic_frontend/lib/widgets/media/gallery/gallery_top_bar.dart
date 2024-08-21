@@ -64,12 +64,13 @@ class _MediaGalleryTopBarState extends State<MediaGalleryTopBar> {
                 icon: Icon(widget.isGridView ? Icons.list : Icons.grid_view),
                 onPressed: widget.onViewToggle,
               ),
-              IconButton(
-                icon: const Icon(Icons.download),
-                onPressed: () async {
-                  await _downloadAllMedia(context);
-                },
-              ),
+              // TODO: Implement download all media
+              // IconButton(
+              //   icon: const Icon(Icons.download),
+              //   onPressed: () async {
+              //     await _downloadAllMedia(context);
+              //   },
+              // ),
             ],
           ),
         ],
