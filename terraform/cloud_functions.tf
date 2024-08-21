@@ -76,15 +76,6 @@ locals {
       },
       mem = "256Mi"
     },
-    "list_bucket_files" = {
-      runtime = "python39"
-        description = "Fetches files from the user's bucket"
-        entry_point = "list_bucket_files"
-        folder      = "buckets/"
-        roles       = ["roles/storage.admin"]
-        environment = {}
-      mem = "256Mi"
-    },
     "list_bucket_files_2" = {
       runtime = "python39"
         description = "Fetches files from the user's bucket"
@@ -94,10 +85,10 @@ locals {
         environment = {}
       mem = "256Mi"
     },
-    "list_bucket_files_3" = {
-      runtime = "python39"
+    "list_bucket_files" = {
+      runtime = "go122"
         description = "Fetches files from the user's bucket"
-        entry_point = "list_bucket_files_3"
+        entry_point = "ListBucketFiles"
         folder      = "buckets/"
         roles       = ["roles/storage.admin",
                        "roles/storage.objectCreator",
@@ -107,10 +98,10 @@ locals {
         environment = {}
       mem = "256Mi"
     },
-    "list_bucket_files_4" = {
+    "clear_signed_urls" = {
       runtime = "go122"
-        description = "Fetches files from the user's bucket"
-        entry_point = "ListBucketFiles"
+        description = "Clears signed URLs from the metadata of blobs in the user's bucket"
+        entry_point = "ClearSignedURLs"
         folder      = "buckets/"
         roles       = ["roles/storage.admin",
                        "roles/storage.objectCreator",
@@ -161,8 +152,6 @@ locals {
   public_function_names = {
     "list_bucket_files" = {},
     "list_bucket_files_2" = {},
-    "list_bucket_files_3" = {},
-    "list_bucket_files_4" = {},
     "upload_chunk" = {},
     "upload_finalize" = {},
     "proxy_file" = {},
@@ -334,12 +323,6 @@ resource "google_project_iam_member" "function_roles" {
   member  = "serviceAccount:${google_service_account.function_accounts[each.value.func_name].email}"
 
   depends_on =  [google_service_account.function_accounts]
-}
-
-resource "google_service_account_key" "function_keys" {
-  for_each = google_service_account.function_accounts
-
-  service_account_id = each.value.id
 }
 
 resource "google_cloudfunctions2_function_iam_member" "invoker" {
