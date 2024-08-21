@@ -53,7 +53,8 @@ class ApiCalls {
 
     int chunkSize = adaptiveChunkSize(baseChunkSizeB, networkSpeedFactor);
     final totalChunks = (bytes.length / chunkSize).ceil();
-    final fileId = DateTime.now().millisecondsSinceEpoch.toString();
+    final fileId =
+        "${DateTime.now().millisecondsSinceEpoch.toString()}-${media.name}";
 
     for (int i = 0; i < totalChunks; i++) {
       final int start = i * chunkSize;

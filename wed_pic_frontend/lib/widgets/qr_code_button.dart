@@ -31,7 +31,6 @@ class _QrCodeButtonState extends State<QrCodeButton> {
     return FloatingActionButton(
       heroTag: 'qr_code_button',
       onPressed: () => _showQrCodeDialog(context),
-      backgroundColor: Colors.blueAccent,
       child: const Icon(
         Icons.qr_code,
         color: Colors.white,

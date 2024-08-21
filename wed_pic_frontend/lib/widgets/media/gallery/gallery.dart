@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:wed_pic_frontend/widgets/custom_error.dart';
+import 'package:wed_pic_frontend/widgets/media/gallery/corner_buttons.dart';
 import 'package:wed_pic_frontend/widgets/media/gallery/gallery_top_bar.dart';
 import 'package:wed_pic_frontend/widgets/media/gallery/grid_view.dart';
 import 'package:wed_pic_frontend/widgets/media/gallery/list_view.dart';
-import 'package:wed_pic_frontend/widgets/upload_button.dart';
-import 'package:wed_pic_frontend/widgets/qr_code_button.dart';
 import 'package:wed_pic_frontend/models/media.dart';
 
 class MediaGallery extends StatefulWidget {
@@ -30,6 +30,7 @@ class MediaGalleryState extends State<MediaGallery> {
               isGridView: _isGridView,
               onViewToggle: _toggleView,
               refreshGallery: widget.refreshGallery,
+              mediaItems: widget.mediaItems,
             ),
             Expanded(
               child: FutureBuilder<List<Media>>(
@@ -38,8 +39,10 @@ class MediaGalleryState extends State<MediaGallery> {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
-                    // TODO: Create a custom error widget
-                    return Center(child: Text('Error: ${snapshot.error}'));
+                    return CustomError(
+                      errorMessage: 'Error: ${snapshot.error}',
+                      onRetry: widget.refreshGallery,
+                    );
                   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                     return const Center(child: Text('No media found.'));
                   }
@@ -53,23 +56,8 @@ class MediaGalleryState extends State<MediaGallery> {
             ),
           ],
         ),
-        // TODO: Move these buttons to a separate class
-        const Positioned(
-          bottom: 16,
-          right: 16,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Padding(
-                padding: EdgeInsets.all(8.0),
-                child: QrCodeButton(),
-              ),
-              Padding(
-                padding: EdgeInsets.all(8.0),
-                child: MediaUploadButton(),
-              ),
-            ],
-          ),
+        CornerButtons(
+          refreshGallery: widget.refreshGallery,
         ),
       ],
     );

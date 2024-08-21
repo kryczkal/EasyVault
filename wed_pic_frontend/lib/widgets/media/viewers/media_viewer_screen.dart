@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:wed_pic_frontend/models/media.dart';
+import 'package:wed_pic_frontend/utils/common.dart';
 import 'package:wed_pic_frontend/widgets/media/viewers/image_viewer.dart';
 import 'package:wed_pic_frontend/widgets/media/viewers/other_file_viewer.dart';
 import 'package:wed_pic_frontend/widgets/media/viewers/video_viewer.dart';
@@ -22,6 +23,14 @@ class MediaViewerScreen extends StatelessWidget {
             Navigator.pop(context);
           },
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.download),
+            onPressed: () {
+              Common.launchUrlWrapper(media.url);
+            },
+          ),
+        ],
       ),
       body: Center(
         child: Padding(

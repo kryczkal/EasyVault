@@ -3,7 +3,7 @@ import 'package:wed_pic_frontend/services/api_client_interface.dart';
 
 class Endpoints {
   const Endpoints();
-  final String fetchMedia = '/list-bucket-files-2';
+  final String fetchMedia = '/list-bucket-files';
   final String uploadMediaChunk = '/upload-chunk';
   final String finalizeMediaUpload = '/upload-finalize';
 

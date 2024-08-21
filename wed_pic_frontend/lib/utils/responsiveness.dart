@@ -6,6 +6,7 @@ class Responsiveness {
   Responsiveness._internal();
 
   static int getCrossAxisCount(double width, int breakpoint) {
-    return 1 + (width / breakpoint).floor();
+    final ratio = (width - breakpoint) / breakpoint;
+    return ratio > 0 ? 1 + ratio.floor() : 1;
   }
 }
