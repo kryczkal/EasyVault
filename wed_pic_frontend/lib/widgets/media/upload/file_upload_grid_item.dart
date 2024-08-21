@@ -4,7 +4,6 @@ import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:wed_pic_frontend/services/api_calls.dart';
 import 'package:wed_pic_frontend/states/session_manager.dart';
-import 'package:wed_pic_frontend/widgets/custom_error.dart';
 import 'package:wed_pic_frontend/widgets/media/upload/file_box.dart';
 import 'package:wed_pic_frontend/widgets/media/upload/finalizing_upload_indicator.dart';
 import 'package:wed_pic_frontend/widgets/media/upload/loading_progress_bar_with_text.dart';
@@ -88,8 +87,10 @@ class FileUploadGridItemState extends State<FileUploadGridItem>
   Future<void> startUpload() async {
     if (_isUploading) return;
 
-    _isUploading = true;
-    _isCanceled = false;
+    setState(() {
+      _isUploading = true;
+      _isCanceled = false;
+    });
     await uploadFile();
   }
 
@@ -97,8 +98,8 @@ class FileUploadGridItemState extends State<FileUploadGridItem>
     if (!_isUploading) return;
 
     setState(() {
-      _isCanceled = true;
       _uploadProgress = 0.0;
+      _isCanceled = true;
       _isUploading = false;
       _uploadFinalStatus = false;
       widget.onUploadComplete(false);
@@ -153,6 +154,18 @@ class FileUploadGridItemState extends State<FileUploadGridItem>
     } finally {
       _isUploading = false;
     }
+  }
+
+  void retryUpload() {
+    if (_isUploading) return;
+
+    setState(() {
+      _uploadProgress = 0.0;
+      _uploadFinalStatus = null;
+      _isUploading = false;
+      _isCanceled = false;
+      startUpload();
+    });
   }
 
   @override
