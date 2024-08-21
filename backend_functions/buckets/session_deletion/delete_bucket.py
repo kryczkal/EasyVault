@@ -9,7 +9,10 @@ def delete_bucket(id: str):
     for bucket_name in bucket_names:
         try:
             bucket = storage_client.get_bucket(bucket_name)
-            bucket.delete()
+            blobs = bucket.list_blobs()
+            for blob in blobs:
+                blob.delete()
+            bucket.delete(force=True)
             print(f'Bucket {bucket_name} deleted.')
         except NotFound:
             print(f'Bucket {bucket_name} not found, skipping deletion.')

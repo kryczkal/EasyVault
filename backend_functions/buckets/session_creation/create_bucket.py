@@ -13,9 +13,9 @@ def create_bucket(id : str):
         {
             "origin": ["*"],
             "responseHeader": [
-                "Content-Type",
-                "x-goog-resumable"],
-            "method": ['PUT', 'POST'],
+                "*", 
+            ],
+            "method": ['GET','PUT', 'POST'],
             "maxAgeSeconds": 3600
         }
     ]
@@ -29,9 +29,9 @@ def create_bucket(id : str):
         {
             "origin": ["*"],
             "responseHeader": [
-                "Content-Type",
-                "x-goog-resumable"],
-            "method": ['PUT', 'POST'],
+                "*", 
+            ],
+            "method": ['GET','PUT', 'POST'],
             "maxAgeSeconds": 3600
         }
     ]

@@ -1,6 +1,7 @@
 locals {
   functions = {
     "session_creation" = {
+      runtime = "python39"
       description = "Handles the service start event by creating a new bucket for the user and registering it in the database"
       entry_point = "session_creation"
       folder      = "buckets/"
@@ -9,6 +10,7 @@ locals {
       mem = "256Mi"
     },
     "session_deletion" = {
+      runtime = "python39"
       description = "Handles the service end event by deleting the user's bucket"
       entry_point = "session_deletion"
       folder      = "buckets/"
@@ -17,6 +19,7 @@ locals {
       mem = "256Mi"
     },
     "create_user" = {
+      runtime = "python39"
       description = "Manages user creation"
       entry_point = "create_user"
       folder      = "db/users/"
@@ -25,6 +28,7 @@ locals {
       mem = "256Mi"
     },
     "delete_user" = {
+      runtime = "python39"
       description = "Manages user deletion"
       entry_point = "delete_user"
       folder      = "db/users/"
@@ -33,6 +37,7 @@ locals {
       mem = "256Mi"
     },
     "create_order" = {
+      runtime = "python39"
       description = "Manages order creation"
       entry_point = "create_order"
       folder      = "db/orders/"
@@ -41,6 +46,7 @@ locals {
       mem = "256Mi"
     },
     "delete_order" = {
+      runtime = "python39"
       description = "Manages order deletion"
       entry_point = "delete_order"
       folder      = "db/orders/"
@@ -49,14 +55,17 @@ locals {
       mem = "256Mi"
     },
     "db_setup" = {
+      runtime = "python39"
       description = "Sets up the database schema"
       entry_point = "db_setup"
       folder      = "db/"
       roles       = ["roles/cloudsql.admin"]
-      environment = {}
+      environment = {
+      }
       mem = "256Mi"
     },
     "auto_sessions" = {
+      runtime = "python39"
       description = "Activates pending orders that have started"
       entry_point = "auto_sessions"
       folder      = "db/db_triggers/"
@@ -67,15 +76,8 @@ locals {
       },
       mem = "256Mi"
     },
-    "list_bucket_files" = {
-        description = "Fetches files from the user's bucket"
-        entry_point = "list_bucket_files"
-        folder      = "buckets/"
-        roles       = ["roles/storage.admin"]
-        environment = {}
-      mem = "256Mi"
-    },
     "list_bucket_files_2" = {
+      runtime = "python39"
         description = "Fetches files from the user's bucket"
         entry_point = "list_bucket_files_2"
         folder      = "buckets/"
@@ -83,7 +85,34 @@ locals {
         environment = {}
       mem = "256Mi"
     },
+    "list_bucket_files" = {
+      runtime = "go122"
+        description = "Fetches files from the user's bucket"
+        entry_point = "ListBucketFiles"
+        folder      = "buckets/"
+        roles       = ["roles/storage.admin",
+                       "roles/storage.objectCreator",
+                       "roles/storage.objectViewer",
+                       "roles/iam.serviceAccountTokenCreator"
+                       ]
+        environment = {}
+      mem = "256Mi"
+    },
+    "clear_signed_urls" = {
+      runtime = "go122"
+        description = "Clears signed URLs from the metadata of blobs in the user's bucket"
+        entry_point = "ClearSignedURLs"
+        folder      = "buckets/"
+        roles       = ["roles/storage.admin",
+                       "roles/storage.objectCreator",
+                       "roles/storage.objectViewer",
+                       "roles/iam.serviceAccountTokenCreator"
+                       ]
+        environment = {}
+      mem = "256Mi"
+    },
     "proxy_file" = {
+      runtime = "python39"
         description = "Proxies a file from the user's bucket"
         entry_point = "proxy_file"
         folder      = "buckets/"
@@ -92,6 +121,7 @@ locals {
       mem = "4Gi"
     },
     "upload_chunk" = {
+      runtime = "python39"
         description = "Uploads a chunk of a file to the user's bucket"
         entry_point = "upload_chunk"
         folder      = "buckets/upload_file/"
@@ -100,6 +130,7 @@ locals {
       mem = "256Mi"
     },
     "upload_finalize" = {
+      runtime = "python39"
         description = "Finalizes the file upload"
         entry_point = "upload_finalize"
         folder      = "buckets/upload_file/"
@@ -108,6 +139,7 @@ locals {
       mem = "4Gi"
     },
     "db_state" = {
+      runtime = "python39"
         description = "Fetches the current state of the database"
         entry_point = "db_state"
         folder      = "db/"
@@ -186,8 +218,6 @@ resource "google_project_iam_member" "function_builder_roles" {
   member  = "serviceAccount:${google_service_account.function_builder.email}"
 }
 
-
-
 # Create Cloud Functions
 resource "google_cloudfunctions2_function" "functions" {
   for_each    = local.functions
@@ -195,7 +225,7 @@ resource "google_cloudfunctions2_function" "functions" {
   location    = local.location
   description = each.value.description
   build_config {
-    runtime = "python39"
+    runtime = each.value.runtime
     entry_point = each.value.entry_point
     source {
       storage_source {
