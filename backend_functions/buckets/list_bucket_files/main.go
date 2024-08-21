@@ -101,7 +101,6 @@ func listBucketFiles(w http.ResponseWriter, r *http.Request) {
 				http.Error(w, fmt.Sprintf("Error generating signed URL: %v", err), http.StatusInternalServerError)
 				return
 			}
-			url = strings.ReplaceAll(url, "\\u0026", "&")
 			fileURL = url
 
 			attrs.Metadata = map[string]string{

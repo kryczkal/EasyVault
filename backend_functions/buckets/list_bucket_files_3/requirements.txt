@@ -1,6 +1,0 @@
-google-cloud-storage
-Flask
-functions-framework
-google-auth
-google-auth-oauthlib
-google-auth-httplib2
