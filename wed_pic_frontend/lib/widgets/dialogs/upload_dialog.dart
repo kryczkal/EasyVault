@@ -19,6 +19,7 @@ class MediaUploadDialogState extends State<MediaUploadDialog> {
   final Map<String, bool> _uploadResults = {};
   final Map<String, GlobalKey<FileUploadGridItemState>> _fileUploadKeys = {};
   bool _uploadStarted = false;
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -26,18 +27,47 @@ class MediaUploadDialogState extends State<MediaUploadDialog> {
     for (var media in widget.selectedMedias) {
       _fileUploadKeys[media.name] = GlobalKey<FileUploadGridItemState>();
     }
+
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => _preloadGridItems(),
+    );
+  }
+
+  void _preloadGridItems() async {
+    _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    await Future.delayed(const Duration(milliseconds: 100));
+    _scrollController.jumpTo(_scrollController.position.minScrollExtent);
   }
 
   void _onUploadComplete(String mediaName, bool success) {
     setState(() {
       _uploadResults[mediaName] = success;
     });
+
     if (_uploadResults.length == widget.selectedMedias.length) {
       final allSuccess = _uploadResults.values.every((element) => element);
       if (allSuccess) {
         Navigator.of(context).pop(true);
       }
     }
+  }
+
+  void _retryFailedUploads() {
+    setState(() {
+      _uploadStarted = false;
+      _uploadResults.clear();
+    });
+
+    for (var media in widget.selectedMedias) {
+      final success = _uploadResults[media.name];
+      if (success == false) {
+        final itemKey = _fileUploadKeys[media.name];
+        itemKey?.currentState?.retryUpload();
+        setState(() {});
+      }
+    }
+
+    _startUploads();
   }
 
   void _startUploads() {
@@ -51,6 +81,7 @@ class MediaUploadDialogState extends State<MediaUploadDialog> {
         itemKey.currentState?.startUpload();
       }
     }
+    setState(() {});
   }
 
   void _cancelUploads() {
@@ -63,6 +94,44 @@ class MediaUploadDialogState extends State<MediaUploadDialog> {
   void dispose() {
     _cancelUploads();
     super.dispose();
+  }
+
+  bool get _canStartUploads {
+    for (var media in widget.selectedMedias) {
+      final itemKey = _fileUploadKeys[media.name];
+      if (itemKey == null || itemKey.currentState == null) {
+        Future.delayed(const Duration(milliseconds: 500), () {
+          _preloadGridItems();
+          if (mounted) {
+            setState(() {});
+          }
+        });
+        return false;
+      }
+    }
+    return true;
+  }
+
+  String get _buttonText {
+    if (_uploadStarted) {
+      if (_uploadResults.length == widget.selectedMedias.length &&
+          _uploadResults.containsValue(false)) {
+        return 'Retry';
+      }
+      return 'Loading...';
+    }
+    return 'Upload';
+  }
+
+  VoidCallback? get _buttonAction {
+    if (_uploadStarted) {
+      if (_uploadResults.length == widget.selectedMedias.length &&
+          _uploadResults.containsValue(false)) {
+        return _retryFailedUploads;
+      }
+      return null;
+    }
+    return _canStartUploads ? _startUploads : null;
   }
 
   @override
@@ -79,6 +148,7 @@ class MediaUploadDialogState extends State<MediaUploadDialog> {
       content: SizedBox(
         width: double.maxFinite,
         child: GridView(
+          controller: _scrollController,
           shrinkWrap: true,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: Responsiveness.getCrossAxisCount(
@@ -118,12 +188,10 @@ class MediaUploadDialogState extends State<MediaUploadDialog> {
               borderRadius: BorderRadius.circular(12),
             ),
           ),
-          onPressed: () {
-            _startUploads();
-          },
-          child: const Text(
-            'Send',
-            style: TextStyle(
+          onPressed: _buttonAction,
+          child: Text(
+            _buttonText,
+            style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
               color: Colors.white,

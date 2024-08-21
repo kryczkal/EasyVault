@@ -12,10 +12,28 @@ class MediaUploadButton extends StatefulWidget {
 }
 
 class _MediaUploadButtonState extends State<MediaUploadButton> {
+  bool _isLoading = false;
+
   Future<void> pickFiles() async {
+    setState(() {
+      _isLoading = true;
+    });
+
     List<XFile>? selectedMedias = await Common.pickFiles();
+
+    setState(() {
+      _isLoading = false;
+    });
+
     if (selectedMedias.isNotEmpty) {
       _showMediaPreview(selectedMedias);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('No media selected'),
+          duration: Duration(seconds: 2),
+        ),
+      );
     }
   }
 
@@ -46,14 +64,30 @@ class _MediaUploadButtonState extends State<MediaUploadButton> {
 
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton(
-      heroTag: 'media_upload_button',
-      onPressed: pickFiles,
-      // backgroundColor: Colors.blueAccent,
-      child: const Icon(
-        Icons.add,
-        color: Colors.white,
-      ),
+    return Stack(
+      children: [
+        FloatingActionButton(
+          heroTag: 'media_upload_button',
+          onPressed: _isLoading ? null : pickFiles,
+          child: _isLoading
+              ? const CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                )
+              : const Icon(
+                  Icons.add,
+                  color: Colors.white,
+                ),
+        ),
+        if (_isLoading)
+          Positioned.fill(
+            child: Container(
+              color: Colors.black38,
+              child: Center(
+                child: const CircularProgressIndicator(),
+              ),
+            ),
+          ),
+      ],
     );
   }
 }
