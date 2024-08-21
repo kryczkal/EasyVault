@@ -33,9 +33,19 @@ class MediaUploadDialogState extends State<MediaUploadDialog> {
     );
   }
 
+  int callCount = 0;
   void _preloadGridItems() async {
-    _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-    await Future.delayed(const Duration(milliseconds: 100));
+    callCount++;
+    int scrollSteps = 5 * callCount;
+
+    double scrollIncrement =
+        _scrollController.position.maxScrollExtent / scrollSteps;
+
+    for (int i = 0; i <= scrollSteps; i++) {
+      double scrollPosition = scrollIncrement * i;
+      _scrollController.jumpTo(scrollPosition);
+      await Future.delayed(const Duration(milliseconds: 100));
+    }
     _scrollController.jumpTo(_scrollController.position.minScrollExtent);
   }
 
@@ -100,7 +110,7 @@ class MediaUploadDialogState extends State<MediaUploadDialog> {
     for (var media in widget.selectedMedias) {
       final itemKey = _fileUploadKeys[media.name];
       if (itemKey == null || itemKey.currentState == null) {
-        Future.delayed(const Duration(milliseconds: 500), () {
+        Future.delayed(Duration(milliseconds: 500 + 500 * callCount), () {
           _preloadGridItems();
           if (mounted) {
             setState(() {});
