@@ -78,15 +78,6 @@ class _MediaUploadButtonState extends State<MediaUploadButton> {
                   color: Colors.white,
                 ),
         ),
-        if (_isLoading)
-          Positioned.fill(
-            child: Container(
-              color: Colors.black38,
-              child: Center(
-                child: const CircularProgressIndicator(),
-              ),
-            ),
-          ),
       ],
     );
   }

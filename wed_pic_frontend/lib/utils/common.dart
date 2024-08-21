@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:html' as html;
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -102,12 +103,19 @@ class Common {
     }
   }
 
+  static Future<void> htmlDownload(String url) {
+    final anchor = html.AnchorElement(href: url)
+      ..setAttribute('download', '')
+      ..click();
+    return Future.value();
+  }
+
   static Future<void> downloadAllMedia(
       BuildContext context, List<Media> mediaList) async {
     for (var media in mediaList) {
       await runWithErrorHandling(
         context,
-        () => launchUrlWrapper(media.url),
+        () => htmlDownload(media.url),
         errorMessage: 'Failed to download media',
       );
     }
