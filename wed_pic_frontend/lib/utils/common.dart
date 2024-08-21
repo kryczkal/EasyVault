@@ -6,7 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wed_pic_frontend/models/media.dart';
-import 'package:wed_pic_frontend/widgets/error.dart';
+import 'package:wed_pic_frontend/widgets/custom_error.dart';
 import 'package:wed_pic_frontend/widgets/media/viewers/media_viewer_screen.dart';
 
 Logger logger = Logger();
@@ -37,6 +37,14 @@ class Common {
     return "${size.toStringAsFixed(2)} ${suffixes[i]}";
   }
 
+  static String calcMediaSize(List<Media> mediaList) {
+    int totalSize = 0;
+    for (var media in mediaList) {
+      totalSize += int.tryParse(media.size) ?? 0;
+    }
+    return formatBytes(totalSize.toString());
+  }
+
   static void pushMediaViewerScreen(BuildContext context, Media media) {
     Navigator.of(context).push(
       MaterialPageRoute(
@@ -45,7 +53,7 @@ class Common {
     );
   }
 
-  static void launchUrlWrapper(String url) async {
+  static Future<void> launchUrlWrapper(String url) async {
     if (!await launchUrl(Uri.parse(url))) {
       throw Exception('Could not launch $url');
     }
@@ -91,6 +99,17 @@ class Common {
       if (context.mounted) {
         showErrorDialog(errorMessage, context, onRetry: onRetry);
       }
+    }
+  }
+
+  static Future<void> downloadAllMedia(
+      BuildContext context, List<Media> mediaList) async {
+    for (var media in mediaList) {
+      await runWithErrorHandling(
+        context,
+        () => launchUrlWrapper(media.url),
+        errorMessage: 'Failed to download media',
+      );
     }
   }
 }

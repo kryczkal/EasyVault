@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:logger/logger.dart';
-import 'package:provider/provider.dart';
-import 'package:wed_pic_frontend/services/api_calls.dart';
-import 'package:wed_pic_frontend/states/session_manager.dart';
 import 'package:wed_pic_frontend/utils/responsiveness.dart';
+import 'package:wed_pic_frontend/widgets/media/upload/file_upload_grid_item.dart';
 
 class MediaUploadDialog extends StatefulWidget {
   final List<XFile> selectedMedias;
@@ -18,111 +15,54 @@ class MediaUploadDialog extends StatefulWidget {
   MediaUploadDialogState createState() => MediaUploadDialogState();
 }
 
-// TODO: Each file grid item should be moved to a separate component
-// TODO: The upload logic should be moved to a separate class and the
-// UI should be separated from the logic
-class MediaUploadDialogState extends State<MediaUploadDialog>
-    with TickerProviderStateMixin {
-  Map<String, bool?> _uploadStatus = {};
-  Map<String, double> _uploadProgress = {};
-  Map<String, AnimationController> _animationControllers = {};
-  Map<String, Animation<double>> _animations = {};
-  var logger = Logger();
+class MediaUploadDialogState extends State<MediaUploadDialog> {
+  final Map<String, bool> _uploadResults = {};
+  final Map<String, GlobalKey<FileUploadGridItemState>> _fileUploadKeys = {};
+  bool _uploadStarted = false;
 
   @override
   void initState() {
     super.initState();
-    _initializeUploadTracking();
+    for (var media in widget.selectedMedias) {
+      _fileUploadKeys[media.name] = GlobalKey<FileUploadGridItemState>();
+    }
+  }
+
+  void _onUploadComplete(String mediaName, bool success) {
+    setState(() {
+      _uploadResults[mediaName] = success;
+    });
+    if (_uploadResults.length == widget.selectedMedias.length) {
+      final allSuccess = _uploadResults.values.every((element) => element);
+      if (allSuccess) {
+        Navigator.of(context).pop(true);
+      }
+    }
+  }
+
+  void _startUploads() {
+    if (_uploadStarted) {
+      return;
+    }
+    _uploadStarted = true;
+    for (var media in widget.selectedMedias) {
+      final itemKey = _fileUploadKeys[media.name];
+      if (itemKey != null) {
+        itemKey.currentState?.startUpload();
+      }
+    }
+  }
+
+  void _cancelUploads() {
+    for (var itemKey in _fileUploadKeys.values) {
+      itemKey.currentState?.cancelUpload();
+    }
   }
 
   @override
   void dispose() {
-    for (var controller in _animationControllers.values) {
-      controller.dispose();
-    }
+    _cancelUploads();
     super.dispose();
-  }
-
-  void _initializeUploadTracking() {
-    setState(() {
-      _uploadStatus = {
-        for (var media in widget.selectedMedias) media.name: null
-      };
-      _uploadProgress = {
-        for (var media in widget.selectedMedias) media.name: 0.0
-      };
-
-      _animationControllers = {
-        for (var media in widget.selectedMedias)
-          media.name: AnimationController(
-            vsync: this,
-            duration: const Duration(milliseconds: 500),
-          )
-      };
-
-      _animations = {
-        for (var media in widget.selectedMedias)
-          media.name: Tween<double>(begin: 0.0, end: 0.0).animate(
-            CurvedAnimation(
-              parent: _animationControllers[media.name]!,
-              curve: Curves.easeInOut,
-            ),
-          )..addListener(() {
-              setState(() {});
-            })
-      };
-    });
-  }
-
-  void _updateProgress(String mediaName, double newProgress) {
-    final controller = _animationControllers[mediaName]!;
-
-    controller.reset();
-
-    _animations[mediaName] = Tween<double>(
-      begin: _uploadProgress[mediaName],
-      end: newProgress,
-    ).animate(CurvedAnimation(
-      parent: controller,
-      curve: Curves.easeInOut,
-    ));
-
-    _uploadProgress[mediaName] = newProgress;
-    controller.forward();
-  }
-
-  Future<void> _uploadFiles() async {
-    final sessionId =
-        Provider.of<SessionManager>(context, listen: false).sessionId;
-
-    if (sessionId == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Session ID is not available')),
-      );
-      return;
-    }
-
-    for (var media in widget.selectedMedias) {
-      try {
-        await ApiCalls.uploadMediaInChunks(
-          sessionId,
-          media,
-          (double progress) {
-            _updateProgress(media.name, progress);
-            logger.i('Upload progress for ${media.name}: $progress');
-          },
-        );
-        setState(() {
-          _uploadStatus[media.name] = true;
-          logger.i('Upload success for ${media.name}');
-        });
-      } catch (e) {
-        setState(() {
-          _uploadStatus[media.name] = false;
-          logger.e('Upload failed for ${media.name}: $e');
-        });
-      }
-    }
   }
 
   @override
@@ -138,89 +78,29 @@ class MediaUploadDialogState extends State<MediaUploadDialog>
       ),
       content: SizedBox(
         width: double.maxFinite,
-        child: GridView.builder(
+        child: GridView(
           shrinkWrap: true,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: Responsiveness.getCrossAxisCount(
-                MediaQuery.of(context).size.width, 200),
+                MediaQuery.of(context).size.width, 300),
             crossAxisSpacing: 8.0,
             mainAxisSpacing: 8.0,
           ),
-          itemCount: widget.selectedMedias.length,
-          itemBuilder: (context, index) {
-            final media = widget.selectedMedias[index];
-            final uploadSuccess = _uploadStatus[media.name];
-
-            return Stack(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Colors.black12,
-                        blurRadius: 8,
-                        offset: Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  alignment: Alignment.center,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        Icons.image,
-                        color: Colors.blueAccent,
-                        size: 40,
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        media.name,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black87,
-                          fontSize: 12,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                      ),
-                    ],
-                  ),
-                ),
-                if (uploadSuccess != null)
-                  Positioned(
-                    right: 4,
-                    top: 4,
-                    child: Icon(
-                      uploadSuccess ? Icons.check_circle : Icons.error,
-                      color: uploadSuccess ? Colors.green : Colors.red,
-                      size: 36,
-                    ),
-                  ),
-                Positioned(
-                  bottom: 2,
-                  left: 8,
-                  right: 8,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(4),
-                    child: LinearProgressIndicator(
-                      value: _animations[media.name]?.value,
-                      backgroundColor: Colors.grey[300],
-                      minHeight: 6,
-                    ),
-                  ),
-                ),
-              ],
+          children: widget.selectedMedias.map((media) {
+            final itemKey = _fileUploadKeys[media.name];
+            return FileUploadGridItem(
+              key: itemKey,
+              media: media,
+              onUploadComplete: (success) =>
+                  _onUploadComplete(media.name, success),
             );
-          },
+          }).toList(),
         ),
       ),
       actions: [
         TextButton(
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.of(context).pop(false);
           },
           child: const Text(
             'Cancel',
@@ -238,8 +118,8 @@ class MediaUploadDialogState extends State<MediaUploadDialog>
               borderRadius: BorderRadius.circular(12),
             ),
           ),
-          onPressed: () async {
-            await _uploadFiles();
+          onPressed: () {
+            _startUploads();
           },
           child: const Text(
             'Send',
