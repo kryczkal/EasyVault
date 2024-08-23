@@ -8,6 +8,7 @@ import 'package:wed_pic_frontend/widgets/media/upload/file_box.dart';
 import 'package:wed_pic_frontend/widgets/media/upload/finalizing_upload_indicator.dart';
 import 'package:wed_pic_frontend/widgets/media/upload/loading_progress_bar_with_text.dart';
 import 'package:wed_pic_frontend/widgets/media/upload/upload_state_icon.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FileUploadGridItem extends StatefulWidget {
   final XFile media;
@@ -114,7 +115,9 @@ class FileUploadGridItemState extends State<FileUploadGridItem>
     if (sessionId == null) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Session ID is not available')),
+          SnackBar(
+              content: Text(
+                  AppLocalizations.of(context)!.uploadInvalidSessionIdText)),
         );
       }
       return;

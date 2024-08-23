@@ -31,15 +31,11 @@ class MediaBox extends StatelessWidget {
           : media.type == 'video'
               ? Icon(
                   Icons.play_circle_outline,
-                  size: size != null
-                      ? size! * 0.9
-                      : null, // Adjust icon size if size is given
+                  size: size != null ? size! * 0.9 : null,
                 )
               : Icon(
                   Icons.insert_drive_file,
-                  size: size != null
-                      ? size! * 0.5
-                      : null, // Adjust icon size if size is given
+                  size: size != null ? size! * 0.5 : null,
                 ),
     );
   }

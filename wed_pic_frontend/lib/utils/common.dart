@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:html' as html;
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:wed_pic_frontend/models/media.dart';
 import 'package:wed_pic_frontend/widgets/custom_error.dart';
 import 'package:wed_pic_frontend/widgets/media/viewers/media_viewer_screen.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Logger logger = Logger();
 
@@ -69,16 +69,17 @@ class Common {
           content: CustomError(
             errorMessage: message,
             onRetry: () {
-              Navigator.of(context).pop(); // Close the dialog
+              Navigator.of(context).pop();
               if (onRetry != null) {
-                onRetry(); // Call the retry function if provided
+                onRetry();
               }
             },
           ),
           actions: <Widget>[
             if (onRetry == null)
               TextButton(
-                child: const Text('OK'),
+                child:
+                    Text(AppLocalizations.of(context)!.errorDialogAcceptText),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
@@ -89,10 +90,11 @@ class Common {
     );
   }
 
+  // TODO: changed to named parameters from optional positional parameters:w
   static Future<void> runWithErrorHandling(
       BuildContext context, Future<void> Function() func,
-      {String errorMessage = "An unexpected error occurred.",
-      VoidCallback? onRetry}) async {
+      [String? errorMessage, VoidCallback? onRetry]) async {
+    errorMessage ??= AppLocalizations.of(context)!.errorDialogDefaultText;
     try {
       await func();
     } catch (error, stackTrace) {
@@ -103,21 +105,11 @@ class Common {
     }
   }
 
-  static Future<void> htmlDownload(String url) {
-    final anchor = html.AnchorElement(href: url)
-      ..setAttribute('download', '')
-      ..click();
-    return Future.value();
-  }
-
-  static Future<void> downloadAllMedia(
-      BuildContext context, List<Media> mediaList) async {
-    for (var media in mediaList) {
-      await runWithErrorHandling(
-        context,
-        () => htmlDownload(media.url),
-        errorMessage: 'Failed to download media',
-      );
-    }
-  }
+  // static Future<void> downloadAllMedia(
+  //     BuildContext context, List<Media> mediaList) async {
+  //   for (var media in mediaList) {
+  //     await runWithErrorHandling(
+  //         context, () => htmlDownload(media.url), 'Failed to download media');
+  //   }
+  // }
 }

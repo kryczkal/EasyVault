@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:wed_pic_frontend/widgets/dialogs/upload_dialog.dart';
 import 'package:wed_pic_frontend/utils/common.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MediaUploadButton extends StatefulWidget {
   final VoidCallback refreshGallery;
@@ -29,8 +30,9 @@ class _MediaUploadButtonState extends State<MediaUploadButton> {
       _showMediaPreview(selectedMedias);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('No media selected'),
+        SnackBar(
+          content:
+              Text(AppLocalizations.of(context)!.uploadNoMediaSelectedText),
           duration: Duration(seconds: 2),
         ),
       );
@@ -50,9 +52,9 @@ class _MediaUploadButtonState extends State<MediaUploadButton> {
     late String message;
     if (result != null && result) {
       widget.refreshGallery();
-      message = 'Media uploaded successfully';
+      message = AppLocalizations.of(context)!.uploadSuccessText;
     } else {
-      message = 'Upload cancelled or failed for some media';
+      message = AppLocalizations.of(context)!.uploadCancelOrErrorText;
     }
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(

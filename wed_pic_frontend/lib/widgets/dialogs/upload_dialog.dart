@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:wed_pic_frontend/utils/responsiveness.dart';
 import 'package:wed_pic_frontend/widgets/media/upload/file_upload_grid_item.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MediaUploadDialog extends StatefulWidget {
   final List<XFile> selectedMedias;
@@ -126,11 +127,11 @@ class MediaUploadDialogState extends State<MediaUploadDialog> {
     if (_uploadStarted) {
       if (_uploadResults.length == widget.selectedMedias.length &&
           _uploadResults.containsValue(false)) {
-        return 'Retry';
+        return AppLocalizations.of(context)!.uploadDialogRetry;
       }
-      return 'Loading...';
+      return AppLocalizations.of(context)!.uploadDialogUploading;
     }
-    return 'Upload';
+    return AppLocalizations.of(context)!.uploadDialogUpload;
   }
 
   VoidCallback? get _buttonAction {
@@ -147,9 +148,9 @@ class MediaUploadDialogState extends State<MediaUploadDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text(
-        'Selected Files',
-        style: TextStyle(
+      title: Text(
+        AppLocalizations.of(context)!.uploadDialogSelectedFiles,
+        style: const TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.w600,
           color: Colors.black87,
@@ -182,9 +183,9 @@ class MediaUploadDialogState extends State<MediaUploadDialog> {
           onPressed: () {
             Navigator.of(context).pop(false);
           },
-          child: const Text(
-            'Cancel',
-            style: TextStyle(
+          child: Text(
+            AppLocalizations.of(context)!.uploadDialogCancel,
+            style: const TextStyle(
               color: Colors.blueAccent,
               fontWeight: FontWeight.w600,
             ),

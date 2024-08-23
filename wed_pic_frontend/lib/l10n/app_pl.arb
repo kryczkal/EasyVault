@@ -1,0 +1,27 @@
+{
+    "closeButton": "Zamknij",
+
+    "homePageSearchBarText": "Wpisz ID sesji",
+    "homePageSearchButtonText": "Szukaj",
+
+    "qrCodeScanDialogText": "Zeskaj kod QR",
+
+    "galleryEmptyText": "Galeria jest pusta. Dodaj pliki, aby zobaczyć je tutaj.",
+
+    "downloadFileText": "Pobierz",
+    "unsupportedFileTypeText": "Nieobsługiwany typ pliku",
+
+    "uploadDialogUpload": "Wgraj",
+    "uploadDialogRetry" : "Powtórz",
+    "uploadDialogUploading": "Wysyłanie...",
+    "uploadFileFinalizingText": "Finalizowanie",
+    "uploadDialogCancel": "Anuluj",
+    "uploadDialogSelectedFiles": "Wybrane pliki:",
+    "uploadSuccessText": "Pliki zostały przesłane pomyślnie.",
+    "uploadCancelOrErrorText": "Przesyłanie plików zostało anulowane lub wystąpił błąd.",
+    "uploadInvalidSessionIdText": "Nieprawidłowy identyfikator sesji.",
+    "uploadNoMediaSelectedText": "Nie wybrano plików do przesłania.",
+
+    "errorDialogAcceptText": "Akceptuj",
+    "errorDialogDefaultText": "Wystąpił niespodziewany błąd"
+}

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wed_pic_frontend/models/media.dart';
 import 'package:wed_pic_frontend/utils/common.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OtherFileViewer extends StatelessWidget {
   final Media media;
@@ -12,16 +13,16 @@ class OtherFileViewer extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text(
-          'Unsupported file type',
-          style: TextStyle(fontSize: 18.0),
+        Text(
+          AppLocalizations.of(context)!.unsupportedFileTypeText,
+          style: const TextStyle(fontSize: 18.0),
         ),
         const SizedBox(height: 10),
         ElevatedButton(
           onPressed: () {
             Common.launchUrlWrapper(media.url);
           },
-          child: const Text('Download File'),
+          child: Text(AppLocalizations.of(context)!.downloadFileText),
         ),
       ],
     );

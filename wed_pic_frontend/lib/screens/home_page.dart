@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomePage extends StatefulWidget {
   static const String route = '/';
@@ -19,7 +20,6 @@ class HomePageState extends State<HomePage> {
     }
   }
 
-  // Set the title font size depending on the screen size
   double _getTitleFontSize(double screenWidth) {
     if (screenWidth < 600) {
       return 48;
@@ -30,7 +30,7 @@ class HomePageState extends State<HomePage> {
     }
   }
 
-  // Break this down into components
+  // TODO: Break this down into components
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,7 +61,8 @@ class HomePageState extends State<HomePage> {
                       child: TextField(
                         controller: _controller,
                         decoration: InputDecoration(
-                          hintText: 'Enter session ID',
+                          hintText: AppLocalizations.of(context)!
+                              .homePageSearchBarText,
                           filled: true,
                           fillColor: Colors.grey[200],
                           border: OutlineInputBorder(
@@ -86,9 +87,9 @@ class HomePageState extends State<HomePage> {
                         padding: const EdgeInsets.symmetric(
                             vertical: 16.0, horizontal: 24.0),
                       ),
-                      child: const Text(
-                        'Go',
-                        style: TextStyle(fontSize: 18),
+                      child: Text(
+                        AppLocalizations.of(context)!.homePageSearchButtonText,
+                        style: const TextStyle(fontSize: 18),
                       ),
                     ),
                   ],

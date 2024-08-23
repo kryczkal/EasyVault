@@ -5,7 +5,7 @@ class Endpoints {
   const Endpoints();
   final String fetchMedia = '/list-bucket-files';
   final String uploadMediaChunk = '/upload-chunk';
-  final String finalizeMediaUpload = '/upload-finalize';
+  final String finalizeMediaUpload = '/upload-finalize-2';
 
   String parseFetchMedia(String sessionId) {
     return '$fetchMedia?session_id=$sessionId';

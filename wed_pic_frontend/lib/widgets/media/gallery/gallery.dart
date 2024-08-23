@@ -5,6 +5,7 @@ import 'package:wed_pic_frontend/widgets/media/gallery/gallery_top_bar.dart';
 import 'package:wed_pic_frontend/widgets/media/gallery/grid_view.dart';
 import 'package:wed_pic_frontend/widgets/media/gallery/list_view.dart';
 import 'package:wed_pic_frontend/models/media.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MediaGallery extends StatefulWidget {
   final Future<List<Media>> mediaItems;
@@ -44,7 +45,10 @@ class MediaGalleryState extends State<MediaGallery> {
                       onRetry: widget.refreshGallery,
                     );
                   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return const Center(child: Text('No media found.'));
+                    return Center(
+                        child: Text(
+                      AppLocalizations.of(context)!.galleryEmptyText,
+                    ));
                   }
 
                   final mediaItems = snapshot.data!;

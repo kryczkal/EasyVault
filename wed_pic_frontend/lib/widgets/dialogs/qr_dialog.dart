@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class QrDialog extends StatelessWidget {
   final String qrData;
@@ -8,7 +9,8 @@ class QrDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Scan this QR Code', textAlign: TextAlign.center),
+      title: Text(AppLocalizations.of(context)!.qrCodeScanDialogText,
+          textAlign: TextAlign.center),
       content: SizedBox(
         width: 200.0,
         height: 200.0,
@@ -22,7 +24,7 @@ class QrDialog extends StatelessWidget {
       ),
       actions: <Widget>[
         TextButton(
-          child: const Text('Close'),
+          child: Text(AppLocalizations.of(context)!.closeButton),
           onPressed: () {
             Navigator.of(context).pop();
           },

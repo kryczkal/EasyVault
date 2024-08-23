@@ -37,7 +37,7 @@ class _MediaGalleryTopBarState extends State<MediaGalleryTopBar> {
     );
 
     if (result != null && result && mounted) {
-      Common.downloadAllMedia(context, mediaItems);
+      // Common.downloadAllMedia(context, mediaItems);
     }
   }
 
