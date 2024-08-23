@@ -21,7 +21,7 @@ class DownloadAllMediaDialog extends StatelessWidget {
           children: [
             TextSpan(
               text:
-                  'Are you sure you want to download ${mediaItems.length} files of total size ',
+                  'are you sure you want to download ${mediaItems.length} files of total size ',
             ),
             TextSpan(
               text: totalSize,

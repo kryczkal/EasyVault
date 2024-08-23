@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CustomError extends StatelessWidget {
   final String errorMessage;
@@ -27,7 +28,7 @@ class CustomError extends StatelessWidget {
           if (onRetry != null)
             ElevatedButton(
               onPressed: onRetry,
-              child: const Text('Retry'),
+              child: Text(AppLocalizations.of(context)!.uploadDialogRetry),
             ),
         ],
       ),

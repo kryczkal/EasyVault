@@ -1,0 +1,89 @@
+{
+    "closeButton": "Close",
+    "@closeButton": {
+        "description": "Text displayed on the close button"
+    },
+
+    "homePageSearchBarText": "Enter session ID",
+    "@homePageSearchBarText": {
+        "description": "Placeholder text for the search bar on the home page"
+    },
+    "homePageSearchButtonText": "Go",
+    "@homePageSearchButtonText": {
+        "description": "Text displayed on the home page, on the button next to the search bar"
+    },
+
+    "qrCodeScanDialogText": "Scan this QR Code",
+    "@qrCodeScanDialogText": {
+        "description": "Text below the QR code on QR dialog"
+    },
+
+    "galleryEmptyText": "This is an empty gallery. Upload some media to see it here.",
+    "@galleryEmptyText": {
+        "description": "Error message displayed when no media is found in the gallery"
+    },
+
+    "downloadFileText": "Download",
+    "@downloadFileText": {
+        "description": "Text displayed on the download button"
+    },
+    "unsupportedFileTypeText": "Unsupported file type",
+    "@unsupportedFileTypeText": {
+        "description": "Error message displayed when the file type is not supported"
+    },
+
+    "uploadDialogUpload": "Upload",
+    "@uploadDialogUpload": {
+        "description" : "Text displayed on the right button of the upload dialog to initiiate file sending"
+    },
+    "uploadDialogRetry" : "Retry",
+    "@uploadDialogRetry": {
+        "description" : "Text displayed on the right button of the upload dialog on error"
+    },
+    "uploadDialogUploading": "Uploading...",
+    "@uploadDialogUploading": {
+        "description" : "Text displayed on the right button of the upload dialog during the file sending process"
+    },
+    "uploadFileFinalizingText": "Finalizing...",
+    "@uploadFileFinalizingText": {
+        "description": "Text displayed on the upload grid_item while the file is being finalized"
+    },
+    "uploadDialogCancel": "Cancel",
+    "@uploadDialogCancel": {
+        "description" : "Text displayed on the left button of the upload dialog to cancel file sending"
+    },
+
+    "uploadDialogSelectedFiles": "Selected files",
+    "@uploadDialogSelectedFiles": {
+        "description" : "Text displayed above the file sending dialog below the selected files"
+    },
+
+    "uploadSuccessText": "Media uploaded successfully",
+    "@uploadSuccessText": {
+        "description": "Text displayed when media is uploaded successfully"
+    },
+
+    "uploadCancelOrErrorText": "Media upload cancelled or failed",
+    "@uploadCancelOrErrorText": {
+        "description": "Text displayed when media upload is cancelled or failed"
+    },
+
+    "uploadInvalidSessionIdText": "Invalid session ID",
+    "@uploadInvalidSessionIdText": {
+        "description": "Text displayed when the session ID is invalid"
+    },
+    "uploadNoMediaSelectedText": "No media selected",
+    "@uploadNoMediaSelectedText": {
+        "description": "Text displayed when no media is selected for upload"
+    },
+
+    "errorDialogAcceptText": "OK",
+    "@errorDialogAcceptText": {
+        "description": "Text displayed when no retry method is provided to custom error widget"
+    },
+
+    "errorDialogDefaultText": "An unexpected error occurred",
+    "@errorDialogDefaultText": {
+        "description": "Text displayed when no error message is provided to custom error widget"
+    }
+}

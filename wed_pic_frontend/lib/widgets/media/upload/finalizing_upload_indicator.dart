@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FinalizingUploadIndicator extends StatelessWidget {
   const FinalizingUploadIndicator({
@@ -7,23 +8,23 @@ class FinalizingUploadIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       children: [
         Text(
-          'Finalizing upload...',
+          AppLocalizations.of(context)!.uploadFileFinalizingText,
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: const TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.black,
           ),
         ),
-        SizedBox(height: 8),
-        Center(
+        const SizedBox(height: 8),
+        const Center(
           child: CircularProgressIndicator(
             strokeWidth: 2.0,
           ),
         ),
-        SizedBox(height: 16),
+        const SizedBox(height: 16),
       ],
     );
   }
