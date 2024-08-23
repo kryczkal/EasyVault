@@ -14,8 +14,16 @@ class DownloadAllMediaDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (mediaItems.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.downloadDialogEmptyText),
+        ),
+      );
+      return const SizedBox.shrink();
+    }
     return AlertDialog(
-      title: const Text('Download Media'),
+      title: Text(AppLocalizations.of(context)!.downloadDialogTitle),
       content: RichText(
         text: TextSpan(
           style: Theme.of(context).textTheme.bodyMedium,
@@ -31,13 +39,13 @@ class DownloadAllMediaDialog extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).pop(false);
           },
-          child: const Text('Cancel'),
+          child: Text(AppLocalizations.of(context)!.uploadDialogCancel),
         ),
         TextButton(
           onPressed: () {
             Navigator.of(context).pop(true);
           },
-          child: const Text('Download'),
+          child: Text(AppLocalizations.of(context)!.downloadDialogAcceptText),
         ),
       ],
       contentPadding:

@@ -25,5 +25,8 @@
     "errorDialogAcceptText": "Akceptuj",
     "errorDialogDefaultText": "Wystąpił niespodziewany błąd",
 
+    "downloadDialogTitle": "Pobieranie plików",
+    "downloadDialogEmptyText": "Nie ma plików do pobrania",
+    "downloadDialogAcceptText": "Pobierz",
     "downloadDialogText": "Czy na pewno chcesz pobrać wszystkie pliki, o łącznej wadze {totalSize}?"
 }

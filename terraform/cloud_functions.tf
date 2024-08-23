@@ -135,7 +135,6 @@ locals {
       environment = {
         GCF_LIST_BUCKET_FILES_NAME = "list-bucket-files"
       }
-      mem = "4Gi"
     }
     "db_state" = {
       runtime     = "python39"
