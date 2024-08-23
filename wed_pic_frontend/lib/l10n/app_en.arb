@@ -87,14 +87,26 @@
         "description": "Text displayed when no error message is provided to custom error widget"
     },
 
-    "downloadDialogText": "Are you sure that you want to download files of total size ${totalSize}?",
+    "downloadDialogTitle": "Download Files",
+    "@downloadDialogTitle": {
+        "description": "Title of the download dialog"
+    },
+    "downloadDialogEmptyText": "No files to download",
+    "@downloadDialogEmptyText": {
+        "description": "Text displayed when no files are selected for download"
+    },
+    "downloadDialogAcceptText": "Download",
+    "@downloadDialogAcceptText": {
+        "description": "Text displayed on the download dialog"
+    },
+    "downloadDialogText": "Are you sure that you want to download files of total size {totalSize}?",
     "@downloadDialogText": {
         "description": "Text displayed on the download dialog",
         "placeholders": {
             "totalSize": {
-                "type": "string",
+                "type": "String",
                 "description": "Total size of the files to be downloaded"
             }
         }
-        }
+    }
 }
