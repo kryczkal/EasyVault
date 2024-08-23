@@ -15,6 +15,7 @@ import (
 	"google.golang.org/api/iterator"
 )
 
+
 var (
 	region    = os.Getenv("GCP_REGION")
 	projectID = os.Getenv("GCP_PROJECT_ID")
@@ -24,7 +25,13 @@ func init() {
 	if region == "" || projectID == "" {
 		log.Fatalf("GCP_REGION and GCP_PROJECT_ID must be set in the environment")
 	}
-	functions.HTTP("ListBucketFiles", listBucketFiles)
+	ctx := context.Background()
+	var err error
+	storageClient, err = storage.NewClient(ctx)
+	if err != nil {
+		log.Fatalf("Failed to create client: %v", err)
+	}
+	functions.HTTP("UploadFinalize", downloadAllFiles)
 }
 
 type FileInfo struct {
@@ -34,7 +41,7 @@ type FileInfo struct {
 	Size int64  `json:"size"`
 }
 
-func listBucketFiles(w http.ResponseWriter, r *http.Request) {
+func downloadAllFiles(w http.ResponseWriter, r *http.Request) {
 	sessionID := r.URL.Query().Get("session_id")
 	if sessionID == "" {
 		var requestData map[string]interface{}
@@ -162,4 +169,3 @@ func validateVideo(extension string) bool {
 	_, exists := VIDEO_EXTENSIONS[extension]
 	return exists
 }
-

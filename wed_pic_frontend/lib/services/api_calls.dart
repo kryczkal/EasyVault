@@ -88,7 +88,8 @@ class ApiCalls {
     await exponentialBackoffRetry(() async {
       await ApiSettings.client.postRequest(
         finalizeUrl,
-        {'fileId': fileId, 'fileName': fileName},
+        {},
+        headers: {'X-File-Id': fileId, 'X-File-Name': fileName},
       );
     }, 6);
   }
