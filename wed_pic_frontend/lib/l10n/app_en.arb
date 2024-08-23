@@ -85,5 +85,16 @@
     "errorDialogDefaultText": "An unexpected error occurred",
     "@errorDialogDefaultText": {
         "description": "Text displayed when no error message is provided to custom error widget"
-    }
+    },
+
+    "downloadDialogText": "Are you sure that you want to download files of total size ${totalSize}?",
+    "@downloadDialogText": {
+        "description": "Text displayed on the download dialog",
+        "placeholders": {
+            "totalSize": {
+                "type": "string",
+                "description": "Total size of the files to be downloaded"
+            }
+        }
+        }
 }

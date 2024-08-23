@@ -15,7 +15,6 @@ import (
 	"google.golang.org/api/iterator"
 )
 
-
 var (
 	region    = os.Getenv("GCP_REGION")
 	projectID = os.Getenv("GCP_PROJECT_ID")
@@ -25,13 +24,7 @@ func init() {
 	if region == "" || projectID == "" {
 		log.Fatalf("GCP_REGION and GCP_PROJECT_ID must be set in the environment")
 	}
-	ctx := context.Background()
-	var err error
-	storageClient, err = storage.NewClient(ctx)
-	if err != nil {
-		log.Fatalf("Failed to create client: %v", err)
-	}
-	functions.HTTP("UploadFinalize", downloadAllFiles)
+	functions.HTTP("ListBucketFiles", listBucketFiles)
 }
 
 type FileInfo struct {
@@ -41,7 +34,7 @@ type FileInfo struct {
 	Size int64  `json:"size"`
 }
 
-func downloadAllFiles(w http.ResponseWriter, r *http.Request) {
+func listBucketFiles(w http.ResponseWriter, r *http.Request) {
 	sessionID := r.URL.Query().Get("session_id")
 	if sessionID == "" {
 		var requestData map[string]interface{}
@@ -98,9 +91,9 @@ func downloadAllFiles(w http.ResponseWriter, r *http.Request) {
 			expiration := time.Now().Add(7 * 24 * time.Hour)
 
 			opts := &storage.SignedURLOptions{
-				Scheme: 	   storage.SigningSchemeV4,
-				Method:        "GET",
-				Expires:       expiration,
+				Scheme:  storage.SigningSchemeV4,
+				Method:  "GET",
+				Expires: expiration,
 			}
 
 			url, err := bucket.SignedURL(attrs.Name, opts)

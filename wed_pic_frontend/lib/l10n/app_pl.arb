@@ -23,5 +23,7 @@
     "uploadNoMediaSelectedText": "Nie wybrano plików do przesłania.",
 
     "errorDialogAcceptText": "Akceptuj",
-    "errorDialogDefaultText": "Wystąpił niespodziewany błąd"
+    "errorDialogDefaultText": "Wystąpił niespodziewany błąd",
+
+    "downloadDialogText": "Czy na pewno chcesz pobrać wszystkie pliki, o łącznej wadze {totalSize}?"
 }
