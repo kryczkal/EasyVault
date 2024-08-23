@@ -14,14 +14,6 @@ class DownloadAllMediaDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (mediaItems.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(AppLocalizations.of(context)!.downloadDialogEmptyText),
-        ),
-      );
-      return const SizedBox.shrink();
-    }
     return AlertDialog(
       title: Text(AppLocalizations.of(context)!.downloadDialogTitle),
       content: RichText(
