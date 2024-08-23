@@ -32,6 +32,15 @@ class _MediaGalleryTopBarState extends State<MediaGalleryTopBar> {
     final mediaItems = await widget.mediaItems;
     final totalSize = Common.calcMediaSize(mediaItems);
 
+    if (mediaItems.isEmpty || totalSize == '0 B') {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.downloadDialogEmptyText),
+        ),
+      );
+      return;
+    }
+
     if (!mounted) return;
     bool? result = await showDialog<bool>(
       context: context,
