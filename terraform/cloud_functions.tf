@@ -121,6 +121,22 @@ locals {
       roles       = ["roles/storage.admin"]
       timeout     = 600
     },
+    "download_all_files" = {
+      runtime     = "go122",
+      description = "Downloads all files from the user's bucket",
+      entry_point = "DownloadAllFiles",
+      folder      = "buckets/",
+      roles = ["roles/storage.admin",
+        "roles/storage.objectCreator",
+        "roles/storage.objectViewer",
+        "roles/iam.serviceAccountTokenCreator"
+      ],
+      timeout = 600
+      environment = {
+        GCF_LIST_BUCKET_FILES_NAME = "list-bucket-files"
+      }
+      mem = "4Gi"
+    }
     "db_state" = {
       runtime     = "python39"
       description = "Fetches the current state of the database"
@@ -137,6 +153,7 @@ locals {
     "upload_finalize"       = {},
     "upload_finalize_bck"   = {},
     "proxy_file"            = {},
+    "download_all_files"    = {},
   }
 
   common_roles = [

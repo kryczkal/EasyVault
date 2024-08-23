@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wed_pic_frontend/models/media.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DownloadAllMediaDialog extends StatelessWidget {
   const DownloadAllMediaDialog({
@@ -20,22 +21,7 @@ class DownloadAllMediaDialog extends StatelessWidget {
           style: Theme.of(context).textTheme.bodyMedium,
           children: [
             TextSpan(
-              text:
-                  'are you sure you want to download ${mediaItems.length} files of total size ',
-            ),
-            TextSpan(
-              text: totalSize,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-            const TextSpan(
-              text: '? This will download all the media files one by one, ',
-            ),
-            const TextSpan(
-              text: 'uncompressed',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            const TextSpan(
-              text: '.',
+              text: AppLocalizations.of(context)!.downloadDialogText(totalSize),
             ),
           ],
         ),

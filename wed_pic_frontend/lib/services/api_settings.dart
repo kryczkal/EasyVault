@@ -6,6 +6,7 @@ class Endpoints {
   final String fetchMedia = '/list-bucket-files';
   final String uploadMediaChunk = '/upload-chunk';
   final String finalizeMediaUpload = '/upload-finalize';
+  final String downloadAllFiles = '/download-all-files';
 
   String parseFetchMedia(String sessionId) {
     return '$fetchMedia?session_id=$sessionId';
@@ -17,6 +18,10 @@ class Endpoints {
 
   String parseFinalizeMediaUpload(String sessionId) {
     return '$finalizeMediaUpload?session_id=$sessionId';
+  }
+
+  String parseDownloadAllFiles(String sessionId) {
+    return '${const Urls().apiUrl}/$downloadAllFiles?session_id=$sessionId';
   }
 }
 

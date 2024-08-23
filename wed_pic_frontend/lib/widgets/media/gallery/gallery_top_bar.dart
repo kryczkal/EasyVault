@@ -1,7 +1,13 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:wed_pic_frontend/models/media.dart';
+import 'package:wed_pic_frontend/services/api_settings.dart';
+import 'package:wed_pic_frontend/states/session_manager.dart';
 import 'package:wed_pic_frontend/utils/common.dart';
 import 'package:wed_pic_frontend/widgets/dialogs/download_all_media_dialog.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 class MediaGalleryTopBar extends StatefulWidget {
   final bool isGridView;
@@ -37,7 +43,24 @@ class _MediaGalleryTopBarState extends State<MediaGalleryTopBar> {
     );
 
     if (result != null && result && mounted) {
-      // Common.downloadAllMedia(context, mediaItems);
+      final sessionId =
+          Provider.of<SessionManager>(context, listen: false).sessionId;
+
+      if (sessionId == null) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                  AppLocalizations.of(context)!.uploadInvalidSessionIdText),
+              duration: const Duration(seconds: 2),
+            ),
+          );
+          return;
+        }
+      }
+      Common.launchUrlWrapper(
+        ApiSettings.endpoints.parseDownloadAllFiles(sessionId!),
+      );
     }
   }
 
@@ -64,13 +87,12 @@ class _MediaGalleryTopBarState extends State<MediaGalleryTopBar> {
                 icon: Icon(widget.isGridView ? Icons.list : Icons.grid_view),
                 onPressed: widget.onViewToggle,
               ),
-              // TODO: Implement download all media
-              // IconButton(
-              //   icon: const Icon(Icons.download),
-              //   onPressed: () async {
-              //     await _downloadAllMedia(context);
-              //   },
-              // ),
+              IconButton(
+                icon: const Icon(Icons.download),
+                onPressed: () async {
+                  await _downloadAllMedia(context);
+                },
+              ),
             ],
           ),
         ],
