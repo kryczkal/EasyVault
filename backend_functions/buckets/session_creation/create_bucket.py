@@ -2,7 +2,7 @@ from google.cloud import storage
 
 def create_bucket(id : str):
     bucket_name = f'{id}'
-    
+
     storage_client = storage.Client()
     bucket = storage_client.create_bucket(bucket_name, location='EUROPE-CENTRAL2')
 
@@ -13,7 +13,7 @@ def create_bucket(id : str):
         {
             "origin": ["*"],
             "responseHeader": [
-                "*", 
+                "*",
             ],
             "method": ['GET','PUT', 'POST'],
             "maxAgeSeconds": 3600
@@ -29,7 +29,7 @@ def create_bucket(id : str):
         {
             "origin": ["*"],
             "responseHeader": [
-                "*", 
+                "*",
             ],
             "method": ['GET','PUT', 'POST'],
             "maxAgeSeconds": 3600
@@ -37,5 +37,5 @@ def create_bucket(id : str):
     ]
     file_upload_bucket.patch()
     file_upload_bucket.update()
-    
+
     return f'Bucket {bucket.name} created.'

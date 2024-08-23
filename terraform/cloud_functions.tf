@@ -1,71 +1,56 @@
 locals {
   functions = {
     "session_creation" = {
-      runtime = "python39"
+      runtime     = "python39"
       description = "Handles the service start event by creating a new bucket for the user and registering it in the database"
       entry_point = "session_creation"
       folder      = "buckets/"
       roles       = ["roles/storage.admin", "roles/cloudsql.editor"]
-      environment = {}
-      mem = "256Mi"
     },
     "session_deletion" = {
-      runtime = "python39"
+      runtime     = "python39"
       description = "Handles the service end event by deleting the user's bucket"
       entry_point = "session_deletion"
       folder      = "buckets/"
       roles       = ["roles/storage.admin", "roles/cloudsql.editor"]
-      environment = {}
-      mem = "256Mi"
     },
     "create_user" = {
-      runtime = "python39"
+      runtime     = "python39"
       description = "Manages user creation"
       entry_point = "create_user"
       folder      = "db/users/"
       roles       = ["roles/cloudsql.editor"]
-      environment = {}
-      mem = "256Mi"
     },
     "delete_user" = {
-      runtime = "python39"
+      runtime     = "python39"
       description = "Manages user deletion"
       entry_point = "delete_user"
       folder      = "db/users/"
       roles       = ["roles/cloudsql.editor"]
-      environment = {}
-      mem = "256Mi"
     },
     "create_order" = {
-      runtime = "python39"
+      runtime     = "python39"
       description = "Manages order creation"
       entry_point = "create_order"
       folder      = "db/orders/"
       roles       = ["roles/cloudsql.editor"]
-      environment = {}
-      mem = "256Mi"
     },
     "delete_order" = {
-      runtime = "python39"
+      runtime     = "python39"
       description = "Manages order deletion"
       entry_point = "delete_order"
       folder      = "db/orders/"
       roles       = ["roles/cloudsql.editor"]
-      environment = {}
-      mem = "256Mi"
     },
     "db_setup" = {
-      runtime = "python39"
+      runtime     = "python39"
       description = "Sets up the database schema"
       entry_point = "db_setup"
       folder      = "db/"
       roles       = ["roles/cloudsql.admin"]
-      environment = {
-      }
-      mem = "256Mi"
     },
     "auto_sessions" = {
-      runtime = "python39"
+      runtime     = "python39"
       description = "Activates pending orders that have started"
       entry_point = "auto_sessions"
       folder      = "db/db_triggers/"
@@ -74,87 +59,84 @@ locals {
         GCF_SESSION_CREATION_NAME = "session-creation"
         GCF_SESSION_DELETION_NAME = "session-deletion"
       },
-      mem = "256Mi"
     },
-    "list_bucket_files_2" = {
-      runtime = "python39"
-        description = "Fetches files from the user's bucket"
-        entry_point = "list_bucket_files_2"
-        folder      = "buckets/"
-        roles       = ["roles/storage.admin"]
-        environment = {}
-      mem = "256Mi"
+    "list_bucket_files_bck" = {
+      runtime     = "python39"
+      description = "Fetches files from the user's bucket, old python version that uses proxy_file/ "
+      entry_point = "list_bucket_files_2"
+      folder      = "buckets/"
+      roles       = ["roles/storage.admin"]
     },
     "list_bucket_files" = {
-      runtime = "go122"
-        description = "Fetches files from the user's bucket"
-        entry_point = "ListBucketFiles"
-        folder      = "buckets/"
-        roles       = ["roles/storage.admin",
-                       "roles/storage.objectCreator",
-                       "roles/storage.objectViewer",
-                       "roles/iam.serviceAccountTokenCreator"
-                       ]
-        environment = {}
-      mem = "256Mi"
+      runtime     = "go122"
+      description = "Fetches files from the user's bucket"
+      entry_point = "ListBucketFiles"
+      folder      = "buckets/"
+      roles = ["roles/storage.admin",
+        "roles/storage.objectCreator",
+        "roles/storage.objectViewer",
+        "roles/iam.serviceAccountTokenCreator"
+      ]
     },
     "clear_signed_urls" = {
-      runtime = "go122"
-        description = "Clears signed URLs from the metadata of blobs in the user's bucket"
-        entry_point = "ClearSignedURLs"
-        folder      = "buckets/"
-        roles       = ["roles/storage.admin",
-                       "roles/storage.objectCreator",
-                       "roles/storage.objectViewer",
-                       "roles/iam.serviceAccountTokenCreator"
-                       ]
-        environment = {}
-      mem = "256Mi"
+      runtime     = "go122"
+      description = "Clears signed URLs from the metadata of blobs in the user's bucket"
+      entry_point = "ClearSignedURLs"
+      folder      = "buckets/"
+      roles = ["roles/storage.admin",
+        "roles/storage.objectCreator",
+        "roles/storage.objectViewer",
+        "roles/iam.serviceAccountTokenCreator"
+      ]
     },
     "proxy_file" = {
-      runtime = "python39"
-        description = "Proxies a file from the user's bucket"
-        entry_point = "proxy_file"
-        folder      = "buckets/"
-        roles       = ["roles/storage.admin"]
-        environment = {}
-      mem = "4Gi"
+      runtime     = "python39"
+      description = "Proxies a file from the user's bucket, old python version"
+      entry_point = "proxy_file"
+      folder      = "buckets/"
+      roles       = ["roles/storage.admin"]
+      mem         = "4Gi"
     },
     "upload_chunk" = {
-      runtime = "python39"
-        description = "Uploads a chunk of a file to the user's bucket"
-        entry_point = "upload_chunk"
-        folder      = "buckets/upload_file/"
-        roles       = ["roles/storage.admin"]
-        environment = {}
-      mem = "256Mi"
+      runtime     = "python39"
+      description = "Uploads a chunk of a file to the user's bucket"
+      entry_point = "upload_chunk"
+      folder      = "buckets/upload_file/"
+      roles       = ["roles/storage.admin"]
+    },
+    "upload_finalize_bck" = {
+      runtime     = "python39"
+      description = "Finalizes the file upload, old python version"
+      entry_point = "upload_finalize"
+      folder      = "buckets/upload_file/"
+      roles       = ["roles/storage.admin"]
+      environment = {}
+      mem         = "4Gi"
     },
     "upload_finalize" = {
-      runtime = "python39"
-        description = "Finalizes the file upload"
-        entry_point = "upload_finalize"
-        folder      = "buckets/upload_file/"
-        roles       = ["roles/storage.admin"]
-        environment = {}
-      mem = "4Gi"
+      runtime     = "go122"
+      description = "Finalizes the file upload"
+      entry_point = "UploadFinalize"
+      folder      = "buckets/upload_file/"
+      roles       = ["roles/storage.admin"]
+      timeout     = 600
     },
     "db_state" = {
-      runtime = "python39"
-        description = "Fetches the current state of the database"
-        entry_point = "db_state"
-        folder      = "db/"
-        roles       = ["roles/cloudsql.client"]
-        environment = {}
-      mem = "256Mi"
+      runtime     = "python39"
+      description = "Fetches the current state of the database"
+      entry_point = "db_state"
+      folder      = "db/"
+      roles       = ["roles/cloudsql.client"]
     },
   }
 
   public_function_names = {
-    "list_bucket_files" = {},
-    "list_bucket_files_2" = {},
-    "upload_chunk" = {},
-    "upload_finalize" = {},
-    "proxy_file" = {},
+    "list_bucket_files"     = {},
+    "list_bucket_files_bck" = {},
+    "upload_chunk"          = {},
+    "upload_finalize"       = {},
+    "upload_finalize_bck"   = {},
+    "proxy_file"            = {},
   }
 
   common_roles = [
@@ -172,14 +154,14 @@ locals {
 
   common_environment = {
     GCP_PROJECT_ID = local.project_id
-    GCP_REGION = local.location
+    GCP_REGION     = local.location
   }
 }
 
 # Cloud Storage bucket for storing Cloud Functions source code
 resource "google_storage_bucket" "function_bucket" {
-  name     = "gcf-source-${local.project_id}"
-  location = local.location
+  name                        = "gcf-source-${local.project_id}"
+  location                    = local.location
   uniform_bucket_level_access = true
 }
 
@@ -193,12 +175,12 @@ data "archive_file" "function_zip" {
 
 resource "google_storage_bucket_object" "function_zip" {
   for_each = local.functions
-  name = "${each.key}.zip"
+  name     = "${each.key}.zip"
 
-  bucket   = google_storage_bucket.function_bucket.name
-  source   = data.archive_file.function_zip[each.key].output_path
+  bucket = google_storage_bucket.function_bucket.name
+  source = data.archive_file.function_zip[each.key].output_path
 
-  depends_on = [ 
+  depends_on = [
     data.archive_file.function_zip,
     google_storage_bucket.function_bucket
   ]
@@ -206,16 +188,16 @@ resource "google_storage_bucket_object" "function_zip" {
 
 # Create service account for building Cloud Functions
 resource "google_service_account" "function_builder" {
-  project = local.project_id
+  project      = local.project_id
   account_id   = "function-builder"
   display_name = "Service Account for building Cloud Functions"
 }
 
 resource "google_project_iam_member" "function_builder_roles" {
   for_each = toset(local.builder_roles)
-  project = local.project_id
-  role    = each.value
-  member  = "serviceAccount:${google_service_account.function_builder.email}"
+  project  = local.project_id
+  role     = each.value
+  member   = "serviceAccount:${google_service_account.function_builder.email}"
 }
 
 # Create Cloud Functions
@@ -225,52 +207,52 @@ resource "google_cloudfunctions2_function" "functions" {
   location    = local.location
   description = each.value.description
   build_config {
-    runtime = each.value.runtime
+    runtime     = each.value.runtime
     entry_point = each.value.entry_point
     source {
       storage_source {
-      bucket = google_storage_bucket.function_bucket.name
-      object = google_storage_bucket_object.function_zip[each.key].name
+        bucket = google_storage_bucket.function_bucket.name
+        object = google_storage_bucket_object.function_zip[each.key].name
       }
     }
     service_account = google_service_account.function_builder.id
   }
 
   service_config {
-    max_instance_count = 1
-    available_memory = each.value.mem
-    timeout_seconds = 60
+    max_instance_count             = 1
+    available_memory               = lookup(each.value, "mem", "256Mi")
+    timeout_seconds                = lookup(each.value, "timeout", 60)
     all_traffic_on_latest_revision = true
-    service_account_email = google_service_account.function_accounts[each.key].email
+    service_account_email          = google_service_account.function_accounts[each.key].email
 
     environment_variables = merge(
       local.common_environment,
-      each.value.environment
+      lookup(each.value, "environment", {})
     )
 
     secret_environment_variables {
-      key = "DB_CONNECTION_NAME"
+      key        = "DB_CONNECTION_NAME"
       project_id = local.project_id
-      secret = google_secret_manager_secret.secrets["db-connection-name"].secret_id
-      version = "latest"
+      secret     = google_secret_manager_secret.secrets["db-connection-name"].secret_id
+      version    = "latest"
     }
     secret_environment_variables {
-      key = "DB_USER"
+      key        = "DB_USER"
       project_id = local.project_id
-      secret = google_secret_manager_secret.secrets["db-username"].secret_id
-      version = "latest"
+      secret     = google_secret_manager_secret.secrets["db-username"].secret_id
+      version    = "latest"
     }
     secret_environment_variables {
-      key = "DB_PASSWORD"
+      key        = "DB_PASSWORD"
       project_id = local.project_id
-      secret = google_secret_manager_secret.secrets["db-password"].secret_id
-      version = "latest"
+      secret     = google_secret_manager_secret.secrets["db-password"].secret_id
+      version    = "latest"
     }
     secret_environment_variables {
-      key = "DB_NAME"
+      key        = "DB_NAME"
       project_id = local.project_id
-      secret = google_secret_manager_secret.secrets["db-name"].secret_id
-      version = "latest"
+      secret     = google_secret_manager_secret.secrets["db-name"].secret_id
+      version    = "latest"
     }
   }
 
@@ -280,18 +262,18 @@ resource "google_cloudfunctions2_function" "functions" {
     google_project_iam_member.function_roles,
   ]
 
-    # Update the function when the source code changes
-    lifecycle {
-      replace_triggered_by = [
-        google_storage_bucket_object.function_zip[each.key]
-       ]
-    }
+  # Update the function when the source code changes
+  lifecycle {
+    replace_triggered_by = [
+      google_storage_bucket_object.function_zip[each.key]
+    ]
+  }
 }
 
 # Create service accounts for each Cloud Function
 resource "google_service_account" "function_accounts" {
   for_each     = local.functions
-  project = local.project_id
+  project      = local.project_id
   account_id   = "sa-${replace(lower(each.key), "_", "-")}"
   display_name = "Service Account for ${each.key} function"
 }
@@ -306,37 +288,37 @@ resource "google_project_iam_member" "function_roles" {
             func_name = func_name
             role      = role
           }
-        ],
-        [
-          for role in local.common_roles : {
-            func_name = func_name
-            role      = role
-          }
-        ]
+          ],
+          [
+            for role in local.common_roles : {
+              func_name = func_name
+              role      = role
+            }
+          ]
         )
       ]
     ) : "${pair.func_name}-${pair.role}" => pair
   }
 
   project = local.project_id
-  role     = each.value.role
+  role    = each.value.role
   member  = "serviceAccount:${google_service_account.function_accounts[each.value.func_name].email}"
 
-  depends_on =  [google_service_account.function_accounts]
+  depends_on = [google_service_account.function_accounts]
 }
 
 resource "google_cloudfunctions2_function_iam_member" "invoker" {
   for_each = local.functions
 
-  location = google_cloudfunctions2_function.functions[each.key].location
-  project  = google_cloudfunctions2_function.functions[each.key].project
+  location       = google_cloudfunctions2_function.functions[each.key].location
+  project        = google_cloudfunctions2_function.functions[each.key].project
   cloud_function = google_cloudfunctions2_function.functions[each.key].name
 
   role = "roles/cloudfunctions.invoker"
 
   member = "allUsers"
 
-  depends_on =  [google_service_account.function_accounts]
+  depends_on = [google_service_account.function_accounts]
 }
 
 # Enable SQL connection for the underlying Cloud Run service
