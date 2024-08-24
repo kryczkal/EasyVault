@@ -1,11 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:wed_pic_frontend/models/media.dart';
-import 'package:wed_pic_frontend/services/api_settings.dart';
-import 'package:wed_pic_frontend/states/session_manager.dart';
-import 'package:wed_pic_frontend/utils/common.dart';
-import 'package:wed_pic_frontend/widgets/dialogs/download_all_media_dialog.dart';
+import 'package:easyvault/models/media.dart';
+import 'package:easyvault/services/api_settings.dart';
+import 'package:easyvault/states/session_manager.dart';
+import 'package:easyvault/utils/common.dart';
+import 'package:easyvault/widgets/dialogs/download_all_media_dialog.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 

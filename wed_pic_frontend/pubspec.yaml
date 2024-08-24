@@ -1,4 +1,4 @@
-name: wed_pic_frontend
+name: easyvault
 description: ""
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -39,7 +39,6 @@ dependencies:
   cached_network_image: ^3.4.0
   logger: ^2.4.0
   video_player: ^2.9.1
-  path_provider: ^2.1.4
   get_thumbnail_video: ^0.6.1
 
   http: any
@@ -48,21 +47,22 @@ dependencies:
   chewie: ^1.8.3
   file_picker: ^8.1.2
   url_launcher: ^6.3.0
-  provider: any
   flutter_localizations:
     sdk: flutter
   intl: any
+  flutter_lints: ^4.0.0
+  provider: ^6.1.2
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  # The "flutter_lints" package below contains a set of recommended lints to
-  # encourage good coding practices. The lint set provided by the package is
-  # activated in the `analysis_options.yaml` file located at the root of your
-  # package. See that file for information about deactivating specific lint
-  # rules and activating additional ones.
-  flutter_lints: ^3.0.0
-  flutter_cors: ^1.5.0
+# The "flutter_lints" package below contains a set of recommended lints to
+# encourage good coding practices. The lint set provided by the package is
+# activated in the `analysis_options.yaml` file located at the root of your
+# package. See that file for information about deactivating specific lint
+# rules and activating additional ones.
+flutter_lints: ^3.0.0
+flutter_cors: ^1.5.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

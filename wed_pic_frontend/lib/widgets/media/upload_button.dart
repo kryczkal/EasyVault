@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:wed_pic_frontend/widgets/dialogs/upload_dialog.dart';
-import 'package:wed_pic_frontend/utils/common.dart';
+import 'package:easyvault/widgets/dialogs/upload_dialog.dart';
+import 'package:easyvault/utils/common.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MediaUploadButton extends StatefulWidget {
@@ -33,7 +33,7 @@ class _MediaUploadButtonState extends State<MediaUploadButton> {
         SnackBar(
           content:
               Text(AppLocalizations.of(context)!.uploadNoMediaSelectedText),
-          duration: Duration(seconds: 2),
+          duration: const Duration(seconds: 2),
         ),
       );
     }

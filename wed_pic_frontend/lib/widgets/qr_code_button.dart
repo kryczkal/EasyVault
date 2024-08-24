@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wed_pic_frontend/services/api_settings.dart';
-import 'package:wed_pic_frontend/states/session_manager.dart';
-import 'package:wed_pic_frontend/widgets/dialogs/qr_dialog.dart';
+import 'package:easyvault/services/api_settings.dart';
+import 'package:easyvault/states/session_manager.dart';
+import 'package:easyvault/widgets/dialogs/qr_dialog.dart';
 
 class QrCodeButton extends StatefulWidget {
   const QrCodeButton({super.key});

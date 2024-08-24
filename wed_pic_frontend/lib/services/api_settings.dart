@@ -1,5 +1,5 @@
-import 'package:wed_pic_frontend/services/api_client.dart';
-import 'package:wed_pic_frontend/services/api_client_interface.dart';
+import 'package:easyvault/services/api_client.dart';
+import 'package:easyvault/services/api_client_interface.dart';
 
 class Endpoints {
   const Endpoints();
@@ -29,7 +29,7 @@ class Urls {
   const Urls();
   final String apiUrl =
       'https://europe-west1-careful-bridge-432408-c6.cloudfunctions.net';
-  final String siteUrl = 'https://careful-bridge-432408-c6.ew.r.appspot.com';
+  final String siteUrl = 'https://easyvault.net';
 
   String parseQrCode(String sessionId) {
     return '$siteUrl/#/session/$sessionId';

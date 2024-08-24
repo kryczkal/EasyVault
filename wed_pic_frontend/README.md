@@ -1,4 +1,4 @@
-# wed_pic_frontend
+# easyvault
 
 A new Flutter project.
 

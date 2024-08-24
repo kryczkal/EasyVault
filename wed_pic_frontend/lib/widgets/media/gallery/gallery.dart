@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:wed_pic_frontend/widgets/custom_error.dart';
-import 'package:wed_pic_frontend/widgets/media/gallery/corner_buttons.dart';
-import 'package:wed_pic_frontend/widgets/media/gallery/gallery_top_bar.dart';
-import 'package:wed_pic_frontend/widgets/media/gallery/grid_view.dart';
-import 'package:wed_pic_frontend/widgets/media/gallery/list_view.dart';
-import 'package:wed_pic_frontend/models/media.dart';
+import 'package:easyvault/widgets/custom_error.dart';
+import 'package:easyvault/widgets/media/gallery/corner_buttons.dart';
+import 'package:easyvault/widgets/media/gallery/gallery_top_bar.dart';
+import 'package:easyvault/widgets/media/gallery/grid_view.dart';
+import 'package:easyvault/widgets/media/gallery/list_view.dart';
+import 'package:easyvault/models/media.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MediaGallery extends StatefulWidget {

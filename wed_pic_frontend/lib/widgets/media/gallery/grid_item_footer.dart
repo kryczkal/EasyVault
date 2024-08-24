@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wed_pic_frontend/models/media.dart';
-import 'package:wed_pic_frontend/utils/common.dart';
+import 'package:easyvault/models/media.dart';
+import 'package:easyvault/utils/common.dart';
 
 class GridItemFooter extends StatelessWidget {
   const GridItemFooter({
