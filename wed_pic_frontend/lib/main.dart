@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wed_pic_frontend/screens/home_page.dart';
-import 'package:wed_pic_frontend/screens/session_page.dart';
-import 'package:wed_pic_frontend/services/api_settings.dart';
-import 'package:wed_pic_frontend/states/session_manager.dart';
+import 'package:easyvault/screens/home_page.dart';
+import 'package:easyvault/screens/session_page.dart';
+import 'package:easyvault/services/api_settings.dart';
+import 'package:easyvault/states/session_manager.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -14,7 +14,7 @@ void main() {
         ChangeNotifierProvider(create: (context) => SessionManager()),
       ],
       child: MaterialApp(
-        title: 'ShareVault',
+        title: 'EasyVault',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),

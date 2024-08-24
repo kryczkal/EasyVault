@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wed_pic_frontend/widgets/media/upload/file_upload_grid_item.dart';
+import 'package:easyvault/widgets/media/upload/file_upload_grid_item.dart';
 
 class FileBox extends StatelessWidget {
   const FileBox({

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:wed_pic_frontend/utils/responsiveness.dart';
-import 'package:wed_pic_frontend/widgets/media/upload/file_upload_grid_item.dart';
+import 'package:easyvault/utils/responsiveness.dart';
+import 'package:easyvault/widgets/media/upload/file_upload_grid_item.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MediaUploadDialog extends StatefulWidget {

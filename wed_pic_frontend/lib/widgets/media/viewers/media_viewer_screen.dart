@@ -1,11 +1,11 @@
 // lib/screens/media_viewer_screen.dart
 
 import 'package:flutter/material.dart';
-import 'package:wed_pic_frontend/models/media.dart';
-import 'package:wed_pic_frontend/utils/common.dart';
-import 'package:wed_pic_frontend/widgets/media/viewers/image_viewer.dart';
-import 'package:wed_pic_frontend/widgets/media/viewers/other_file_viewer.dart';
-import 'package:wed_pic_frontend/widgets/media/viewers/video_viewer.dart';
+import 'package:easyvault/models/media.dart';
+import 'package:easyvault/utils/common.dart';
+import 'package:easyvault/widgets/media/viewers/image_viewer.dart';
+import 'package:easyvault/widgets/media/viewers/other_file_viewer.dart';
+import 'package:easyvault/widgets/media/viewers/video_viewer.dart';
 
 class MediaViewerScreen extends StatelessWidget {
   final Media media;

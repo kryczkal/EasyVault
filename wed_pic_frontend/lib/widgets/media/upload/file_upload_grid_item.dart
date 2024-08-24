@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
-import 'package:provider/provider.dart';
-import 'package:wed_pic_frontend/services/api_calls.dart';
-import 'package:wed_pic_frontend/states/session_manager.dart';
-import 'package:wed_pic_frontend/widgets/media/upload/file_box.dart';
-import 'package:wed_pic_frontend/widgets/media/upload/finalizing_upload_indicator.dart';
-import 'package:wed_pic_frontend/widgets/media/upload/loading_progress_bar_with_text.dart';
-import 'package:wed_pic_frontend/widgets/media/upload/upload_state_icon.dart';
+import 'package:easyvault/services/api_calls.dart';
+import 'package:easyvault/states/session_manager.dart';
+import 'package:easyvault/widgets/media/upload/file_box.dart';
+import 'package:easyvault/widgets/media/upload/finalizing_upload_indicator.dart';
+import 'package:easyvault/widgets/media/upload/loading_progress_bar_with_text.dart';
+import 'package:easyvault/widgets/media/upload/upload_state_icon.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 class FileUploadGridItem extends StatefulWidget {
   final XFile media;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wed_pic_frontend/widgets/qr_code_button.dart';
-import 'package:wed_pic_frontend/widgets/media/upload_button.dart';
+import 'package:easyvault/widgets/qr_code_button.dart';
+import 'package:easyvault/widgets/media/upload_button.dart';
 
 class CornerButtons extends StatelessWidget {
   final VoidCallback refreshGallery;

@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:wed_pic_frontend/models/media.dart';
+import 'package:easyvault/models/media.dart';
 
 class MediaBox extends StatelessWidget {
   final double? size;

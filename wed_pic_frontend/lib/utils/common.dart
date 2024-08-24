@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:wed_pic_frontend/models/media.dart';
-import 'package:wed_pic_frontend/widgets/custom_error.dart';
-import 'package:wed_pic_frontend/widgets/media/viewers/media_viewer_screen.dart';
+import 'package:easyvault/models/media.dart';
+import 'package:easyvault/widgets/custom_error.dart';
+import 'package:easyvault/widgets/media/viewers/media_viewer_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Logger logger = Logger();

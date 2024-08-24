@@ -1,6 +1,6 @@
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
-import 'package:wed_pic_frontend/services/api_settings.dart';
+import 'package:easyvault/services/api_settings.dart';
 import 'dart:convert';
 
 import 'api_client_interface.dart';

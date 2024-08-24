@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:wed_pic_frontend/widgets/media/gallery/media_box.dart';
-import 'package:wed_pic_frontend/models/media.dart';
-import 'package:wed_pic_frontend/utils/common.dart';
+import 'package:easyvault/widgets/media/gallery/media_box.dart';
+import 'package:easyvault/models/media.dart';
+import 'package:easyvault/utils/common.dart';
 
 class MediaListItem extends StatelessWidget {
   final Media media;
