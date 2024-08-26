@@ -19,7 +19,7 @@ class MediaGallery extends StatefulWidget {
 }
 
 class MediaGalleryState extends State<MediaGallery> {
-  bool _isGridView = true;
+  bool _isGridView = false;
 
   @override
   Widget build(BuildContext context) {

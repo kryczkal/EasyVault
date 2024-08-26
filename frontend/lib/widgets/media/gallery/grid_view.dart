@@ -13,7 +13,7 @@ class MediaGridView extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         int crossAxisCount =
-            Responsiveness.getCrossAxisCount(constraints.maxWidth, 300);
+            Responsiveness.getCrossAxisCount(constraints.maxWidth, 600);
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: GridView.builder(

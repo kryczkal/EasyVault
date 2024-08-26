@@ -12,9 +12,15 @@ class ImageViewer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InteractiveViewer(
-      child: CachedNetworkImage(
-        imageUrl: media.url,
+      child: Image.network(
+        media.url,
         fit: BoxFit.contain,
+        loadingBuilder: (context, child, loadingProgress) {
+          if (loadingProgress == null) return child;
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
       ),
     );
   }

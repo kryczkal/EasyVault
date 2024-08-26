@@ -19,6 +19,7 @@ class MediaListItem extends StatelessWidget {
         child: MediaBox(
           media: media,
           size: 50,
+          filterQuality: FilterQuality.low,
         ),
       ),
       title: Text(media.name),
