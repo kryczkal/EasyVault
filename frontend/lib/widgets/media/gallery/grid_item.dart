@@ -16,6 +16,7 @@ class GridItem extends StatelessWidget {
         footer: GridItemFooter(media: media),
         child: MediaBox(
           media: media,
+          filterQuality: FilterQuality.medium,
         ),
       ),
       onTap: () => {Common.pushMediaViewerScreen(context, media)},
