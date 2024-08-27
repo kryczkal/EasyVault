@@ -69,7 +69,7 @@ class ApiCalls {
           headers: {
             'Content-Type': 'application/octet-stream',
             'X-File-Id': fileId,
-            'X-Chunk-Index': i.toString(),
+            'X-Chunk-Index': (i + 1).toString(),
             'X-Total-Chunks': totalChunks.toString(),
           },
         );
