@@ -1,6 +1,0 @@
-google-cloud-secret-manager
-google-cloud-storage
-functions-framework
-sqlalchemy
-pg8000
-Flask
