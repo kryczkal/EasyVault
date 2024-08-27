@@ -101,7 +101,7 @@ func uploadFinalize(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fileName = fmt.Sprintf("%s-%s.%s", strings.TrimSuffix(fileName, filepath.Ext(fileName)), uuid.NewString(), filepath.Ext(fileName))
+	fileName = fmt.Sprintf("%s-%st%s", strings.TrimSuffix(fileName, filepath.Ext(fileName)), uuid.NewString(), filepath.Ext(fileName))
 
 	if checkIfBlobExists(ctx, destinationBucket, fileName) {
 		warningLogger.Printf("File %s already exists in destination bucket", fileName)
