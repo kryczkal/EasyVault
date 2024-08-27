@@ -4,16 +4,18 @@ locals {
       runtime     = "python39"
       description = "Handles the service start event by creating a new bucket for the user and registering it in the database"
       entry_point = "session_creation"
-      folder      = "buckets/"
+      folder      = "/"
       roles       = ["roles/storage.admin", "roles/cloudsql.editor"]
     },
     "session_deletion" = {
       runtime     = "python39"
       description = "Handles the service end event by deleting the user's bucket"
       entry_point = "session_deletion"
-      folder      = "buckets/"
+      folder      = "/"
       roles       = ["roles/storage.admin", "roles/cloudsql.editor"]
     },
+
+    // DB functions
     "create_user" = {
       runtime     = "python39"
       description = "Manages user creation"
@@ -60,13 +62,15 @@ locals {
         GCF_SESSION_DELETION_NAME = "session-deletion"
       },
     },
-    "list_bucket_files_bck" = {
+    "db_state" = {
       runtime     = "python39"
-      description = "Fetches files from the user's bucket, old python version that uses proxy_file/ "
-      entry_point = "list_bucket_files_2"
-      folder      = "buckets/"
-      roles       = ["roles/storage.admin"]
+      description = "Fetches the current state of the database"
+      entry_point = "db_state"
+      folder      = "db/"
+      roles       = ["roles/cloudsql.client"]
     },
+    
+    // Bucket functions
     "list_bucket_files" = {
       runtime     = "go122"
       description = "Fetches files from the user's bucket"
@@ -89,29 +93,12 @@ locals {
         "roles/iam.serviceAccountTokenCreator"
       ]
     },
-    "proxy_file" = {
-      runtime     = "python39"
-      description = "Proxies a file from the user's bucket, old python version"
-      entry_point = "proxy_file"
-      folder      = "buckets/"
-      roles       = ["roles/storage.admin"]
-      mem         = "4Gi"
-    },
     "upload_chunk" = {
-      runtime     = "python39"
+      runtime     = "go122"
       description = "Uploads a chunk of a file to the user's bucket"
-      entry_point = "upload_chunk"
+      entry_point = "UploadChunk"
       folder      = "buckets/upload_file/"
       roles       = ["roles/storage.admin"]
-    },
-    "upload_finalize_bck" = {
-      runtime     = "python39"
-      description = "Finalizes the file upload, old python version"
-      entry_point = "upload_finalize"
-      folder      = "buckets/upload_file/"
-      roles       = ["roles/storage.admin"]
-      environment = {}
-      mem         = "4Gi"
     },
     "upload_finalize" = {
       runtime     = "go122"
@@ -136,29 +123,20 @@ locals {
         GCF_LIST_BUCKET_FILES_NAME = "list-bucket-files"
       }
     }
-    "db_state" = {
-      runtime     = "python39"
-      description = "Fetches the current state of the database"
-      entry_point = "db_state"
-      folder      = "db/"
-      roles       = ["roles/cloudsql.client"]
-    },
   }
 
   public_function_names = {
     "list_bucket_files"     = {},
-    "list_bucket_files_bck" = {},
     "upload_chunk"          = {},
     "upload_finalize"       = {},
-    "upload_finalize_bck"   = {},
-    "proxy_file"            = {},
     "download_all_files"    = {},
   }
 
   common_roles = [
     "roles/cloudfunctions.invoker",
     "roles/run.invoker",
-    "roles/secretmanager.secretAccessor"
+    "roles/secretmanager.secretAccessor",
+    "roles/logging.logWriter",
   ]
 
   builder_roles = [
@@ -235,7 +213,7 @@ resource "google_cloudfunctions2_function" "functions" {
   }
 
   service_config {
-    max_instance_count             = 1
+    min_instance_count = lookup(each.value, "min_instances", 0)
     available_memory               = lookup(each.value, "mem", "256Mi")
     timeout_seconds                = lookup(each.value, "timeout", 60)
     all_traffic_on_latest_revision = true

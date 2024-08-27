@@ -47,7 +47,6 @@ func init() {
 	if err != nil {
 		log.Fatalf("Failed to create logging client: %v", err)
 	}
-	defer client.Close()
 
 	logName := "upload-chunk"
 	logger = client.Logger(logName).StandardLogger(logging.Info)
@@ -58,21 +57,15 @@ func init() {
 }
 
 func uploadChunk(w http.ResponseWriter, r *http.Request) {
-	logger.Println("UploadChunk function called")
-
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, X-File-Id, X-Chunk-Index, X-Total-Chunks")
-
-	ctx := r.Context()
+	writeHeaders(w)
 
 	if r.Method == "OPTIONS" {
-		logger.Println("Handling preflight request")
-		handleOptionsRequest(w)
+		w.WriteHeader(http.StatusNoContent)
 		return
 	}
 
-	logger.Println("Getting session ID")
+
+	ctx := r.Context()
 	sessionID, err := getSessionID(r)
 	if err != nil {
 		warningLogger.Printf("Failed to get session ID: %v", err)
@@ -95,14 +88,15 @@ func uploadChunk(w http.ResponseWriter, r *http.Request) {
 	}
 
 	logger.Printf("Successfully uploaded chunk: %d/%d for file %s", chunkInfo.ChunkIndex, chunkInfo.TotalChunks, chunkInfo.FileID)
-	fmt.Fprintf(w, "Chunk uploaded successfully")
+
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(map[string]string{"message": "Chunk uploaded successfully"})
 }
 
-func handleOptionsRequest(w http.ResponseWriter) {
+func writeHeaders(w http.ResponseWriter) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, X-File-ID, X-Chunk-Index, X-Total-Chunks")
-	w.WriteHeader(http.StatusNoContent)
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, X-File-Id, X-Chunk-Index, X-Total-Chunks")
 }
 
 func getSessionID(r *http.Request) (string, error) {
