@@ -1,6 +1,6 @@
 # FullStack Web Application
 
-This project is a full-featured fullstack web application designed for file sharing with friends. It leverages Google Cloud for a serverless architecture, using Terraform for infrastructure management, Go and Python for the backend, and Flutter for the frontend.
+This project is a full-featured fullstack web application designed for file sharing with friends on events like weddings or parties. It leverages Google Cloud for a serverless architecture, using Terraform for infrastructure management, Go and Python for the backend, and Flutter for the frontend.
 
 ## Project Structure
 
@@ -26,12 +26,37 @@ This project is a full-featured fullstack web application designed for file shar
 - Flutter SDK
 - Go and Python environments set up
 
-### Configuring the Backend
+## Configuring the Backend
+### Terraform Setup:
+1. Create a new project in Google Cloud Platform
+2. Authorize the Google Cloud SDK
+```bash
+gcloud auth login (on machines without a browser the --no-browser flag can be used)
+```
+2. Select the project in the Google Cloud SDK
+```bash
+gcloud config set project <project-id>
+```
 
-1. **Terraform Setup**:
-   - Navigate to the `backend/terraform` directory.
-   - Initialize Terraform with `terraform init`.
-   - Apply configuration with `terraform apply`.
+3. Create a new service account and download the key file [create-gcloud-credentials.sh](backend/scripts/create-gcloud-credentials.sh)) (ensure you have the necessary permissions on the google cloud)
+
+4. Tweak the terraform [variables.tf](backend/terraform/variables.tf) file to match your project id and service account key file path
+
+5. Prepare terraform for migrating the backend to google cloud
+You will need to disable the "gcs" backend in the [terraform_backend.tf](backend/terraform/terraform_backend.tf) file (comment it out), run `terraform init` once, and then uncomment it, so we can migrate the backend from local to gcloud
+
+5. Create a Google Cloud Bucket for the terraform state
+```bash
+cd backend/terraform
+./migrate_backend_to_gcloud.sh
+```
+
+6. Deploy the infrastructure using terraform:
+```bash
+cd backend/terraform
+terraform init
+terraform apply
+```
 
 ### Configuring the Frontend
 
@@ -44,6 +69,7 @@ This project is a full-featured fullstack web application designed for file shar
 
 - The web application allows users to securely share files with their friends. 
 - Functions like file upload/download, session management, and user creation/deletion are handled through the serverless backend.
+- There is currently no in-app ordering method, so "sessions" are created manually through the "create_order" function, followed by a call to "auto-sessions" to automatically create and destroy the sessions 
 
 ## Contributing
 
